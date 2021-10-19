@@ -236,3 +236,51 @@ Install the **plotly** package from [CRAN](https://cran.r-project.org/web/packag
 install.packages("plotly")
 ```
 ---
+class: hide-logo
+# plotly animation of gapminder dataset (1/2)
+```{r eval=TRUE, tidy=TRUE}
+library(plotly)
+library(gapminder)
+library(tidyverse)
+
+gapminder %>% 
+  plot_ly(x = ~gdpPercap, y = ~lifeExp,
+          hoverinfo = "text",
+          text = ~paste("</br> Country: ", country,
+                        "</br> GDP per capita: ", round(gdpPercap, 0),
+                        "</br> Life Expectancy: ", lifeExp,
+                        "</br> Population: ", round(pop/1000000, 0), " Mio")) %>% 
+  add_text(x = 6500, y = 40, 
+           text = ~year, frame = ~year,
+           textfont = list(size = 150, 
+                           color = toRGB("gray80"))) %>% 
+  add_markers(size = ~pop, color = ~continent,
+              frame = ~year, ids = ~country,
+              marker = list(sizemode = "diameter")) -> ani_plot 
+```
+---
+class: hide-logo
+# plotly animation of gapminder dataset (1/2)
+```{r eval=TRUE, tidy=TRUE, message=FALSE}
+ani_plot %>% 
+  layout(title = list(text = "GDP per capita vs. Life Expectancy from 1952 to 2007",
+                      xanchor = "center",
+                      x = 1000),
+         xaxis = list(type = "log",
+                      title = "GDP per capita"), 
+         yaxis = list(type = "log",
+                      title = "Life Expectancy at birth"),
+         showlegend = FALSE) %>% 
+  animation_opts(frame = "500",
+                 transition = "500",
+                 easing = "linear",
+                 redraw = FALSE) %>% 
+  animation_slider(hide = TRUE)  -> ani_plot
+```
+---
+class: hide-logo
+```{r eval=TRUE, tidy=TRUE}
+ani_plot
+  
+```
+
