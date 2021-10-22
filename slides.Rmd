@@ -6,8 +6,8 @@ institute: "Hertie School"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
+    css: [default, red_theme.css]
     yolo: false
-    css: ["red_theme.css", metropolis-fonts]
     lib_dir: libs
     includes:
       after_body: insert_logo.html
@@ -16,6 +16,7 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+class: hide-logo
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Plotly_logo_for_digital_final_%286%29.png/1600px-Plotly_logo_for_digital_final_%286%29.png)
 background-position: center
 background-size: contain
@@ -58,12 +59,12 @@ class: center, middle
 ## 6. Resources
 
 ---
+background-image: url("https://tonyelhabr.rbind.io/post/visualizing-nba-team-schedule/data-science.png")
+background-position: center
+background-size: contain
 
 # Data Visualisation
 
-background-image: url(https://d33wubrfki0l68.cloudfront.net/3e0445f7fc16698cc4402445259d84aa411dddc3/9abcb/diagrams/data-science-communicate.png)
-background-position: center
-background-size: contain
 
 
 ### ...Unsure why url image is not working. We may need to download to our GitHub repository to create a local reference for the image.
@@ -73,12 +74,11 @@ background-size: contain
 Image credit: [source goes here](link goes here)
 
 ---
-
-# Intro to plotly
-
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Plotly_logo_for_digital_final_%286%29.png/1600px-Plotly_logo_for_digital_final_%286%29.png)
 background-position: center
 background-size: contain
+
+# Intro to plotly
 
 ### ...Same issue as previous slides, esp considering how this code already rendered the plotly logo successfully on the first slide.
 
@@ -89,10 +89,45 @@ Image credit: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Plotly
 
 ---
 
-# Why plotly? 
+# Why plotly?
+<br/>
+.right-column[
+```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center'}
+library(plotly)
 
-{Insert bar chart showing market share for plotly vs other R-JS interfaces}
+data.frame(libraries = c("plotly.R", "rbokeh", "trellisopejs", "dygraphs", "ggvis", "ggplot2"),
+           github_stars = c(2100, 293, 217, 328, 700, 5100),
+           github_watch = c(287, 35, 11, 42, 128, 318),
+           forks = c(1600, 65, 35, 196, 185, 1800)) -> viz_data
 
+plot_ly(viz_data, x = ~libraries, 
+        y = ~github_stars, type = "bar",
+        name = "GitHub Stars", hoverinfo = "text",
+        text = ~paste0("</br> Library: ", libraries,
+                       "</br> Stars: ", github_stars,
+                       "</br> Watchers: ", github_watch, 
+                       "</br> Forks: ", forks)) %>% 
+  add_trace(y = ~forks, name = "GitHub Forks") %>% 
+  add_trace(y = ~github_watch, name = "GitHub Watchers") %>% 
+  layout(title = "Plotting libraries in R",
+         xaxis = list(title = "Library"),
+         yaxis = list(title = "Number of Forks/ Stars/ Watchers"),
+         paper_bgcolor = 'rgba(0,0,0,0)',
+         plot_bgcolor = 'rgba(0,0,0,0)',
+         autosize = FALSE, width = 550, 
+         height = 400, margin = list(l = 60, r = 50, b = 5, t = 25, pad = 5))
+```
+]
+</br>
+</br>
+.left-column[.font80[
+####Strengths of interactive Plotting:
+</br>
+- Complex Information
+- High-dimensional Data
+- Exploratory Data Analysis
+- Engaging Viewer Experience
+]]
 ---
 
 # Intro to plotly
@@ -138,14 +173,50 @@ class: center, middle
 ---
 
 # How does plotly work? 
+<details>
+  <summary>
+  Grammar of Basic Plotting in plotly
+  </summary>
+.details[
+.code100[
+```{r, eval=TRUE, prompt=TRUE, message=FALSE, warning=FALSE}
+library(plotly)
+fig <- cars %>% 
+  plot_ly(x = ~speed, y = ~dist) %>% 
+  add_markers() %>% 
+  layout(title = list(text = "Speed vs. Distance", 
+                      x = 0.1, y = 0.01),
+         paper_bgcolor = 'rgba(0,0,0,0)',
+         plot_bgcolor = 'rgba(0,0,0,0)')
+```
+]
+]
+</details>
 
-- Grammar of Graphics
-    - similar to ggplot2
-- Key Terms
-    - Trace: the data
-    - Trace Type: ex. histogram, pie, scatter, etc.
-    - Attribute: the style
+<details>
+  <summary>
+  Plot
+  </summary>
+.details[
+.code10[
+```{r, echo=FALSE}
+fig
+```
+]
+]
+</details>
 
+<details>
+  <summary>
+  Take aways
+  </summary>
+.details[
+* Call plotly with **plot_ly** and map variables
+* Chain traces with pipes **%>%** 
+* Always pass variables with a tilde **~** 
+* You will oftentimes need to pass parameters in **lists**!
+]
+</details>
 ---
 
 # How does plotly work? 
@@ -161,12 +232,41 @@ class: center, middle
 
 # How does plotly work? 
 
-## 1. Transform a ggplot2 graphic into a plotly graphic
-### - **ggplotly()**
-## 2. Directly initialize a plotly graphic 
-### - **plot_ly()**
-### - plot_geo()
-### - plot_mapbox()
+### Transform a ggplot2 graphic into a plotly graphic
+</br>
+**ggplotly()**
+<details>
+  <summary>
+  Example
+  </summary>
+.details[
+```{r, eval=TRUE, message=FALSE, warning=FALSE, echo=TRUE}
+library(ggplot2)
+gg <- mtcars %>% 
+  ggplot(aes(x = wt)) +
+  geom_histogram()
+```
+]
+</details>
+
+<details>
+  <summary>
+  Plot
+  </summary>
+.details[
+```{r, eval=TRUE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4}
+ggplotly(gg) 
+```
+]
+</details>
+
+### Directly initialize a plotly graphic 
+</br>
+**plot_ly()**
+
+plot_geo()
+
+plot_mapbox()
     
 ---
 
@@ -220,67 +320,142 @@ class: center, middle
 
 # What can plotly do? 
 
-(https://i.imgflip.com/5qzavw.jpg)
+.center2[![plots and charts and boxes](https://i.imgflip.com/5qzavw.jpg)]
 
 ---
+# What can plotly do?
 
 
-(https://upload.wikimedia.org/wikipedia/en/0/0a/Gallery_of_Plotly_Graphs.png)
-
+.center2[![plotly gallery](https://upload.wikimedia.org/wikipedia/en/0/0a/Gallery_of_Plotly_Graphs.png)
+]
 
 ---
-
+# Installation
 Install the **plotly** package from [CRAN](https://cran.r-project.org/web/packages/plotly/index.html):
 
 ```{r eval=FALSE, tidy=FALSE}
 install.packages("plotly")
 ```
 ---
-class: hide-logo
-# plotly animation of gapminder dataset (1/2)
-```{r eval=TRUE, tidy=TRUE}
+# Animated Plots in plotly
+<details>
+  <summary>
+  Code chunk
+  </summary>
+.details[.code80[
+```{r eval=TRUE, message=FALSE, warning=FALSE, prompt=TRUE}
 library(plotly)
-library(gapminder)
+library(gapminder) # dataset
 library(tidyverse)
 
 gapminder %>% 
-  plot_ly(x = ~gdpPercap, y = ~lifeExp,
+  plot_ly(x = ~gdpPercap, y = ~lifeExp, # variables
           hoverinfo = "text",
-          text = ~paste("</br> Country: ", country,
+          text = ~paste("</br> Country: ", country, # Hover text box
                         "</br> GDP per capita: ", round(gdpPercap, 0),
                         "</br> Life Expectancy: ", lifeExp,
                         "</br> Population: ", round(pop/1000000, 0), " Mio")) %>% 
-  add_text(x = 6500, y = 40, 
+  add_text(x = 6500, y = 40, # Background text
            text = ~year, frame = ~year,
            textfont = list(size = 150, 
                            color = toRGB("gray80"))) %>% 
-  add_markers(size = ~pop, color = ~continent,
+  add_markers(size = ~pop, color = ~continent, # Customizing Markers, Mapping continent onto color
               frame = ~year, ids = ~country,
-              marker = list(sizemode = "diameter")) -> ani_plot 
-```
----
-class: hide-logo
-# plotly animation of gapminder dataset (1/2)
-```{r eval=TRUE, tidy=TRUE, message=FALSE}
-ani_plot %>% 
-  layout(title = list(text = "GDP per capita vs. Life Expectancy from 1952 to 2007",
-                      xanchor = "center",
-                      x = 1000),
+              marker = list(sizemode = "diameter")) %>% 
+  layout(title = "GDP per capita vs. Life Expectancy from 1952 to 2007",
          xaxis = list(type = "log",
                       title = "GDP per capita"), 
          yaxis = list(type = "log",
                       title = "Life Expectancy at birth"),
+         paper_bgcolor = 'rgba(0,0,0,0)', # Transparent Background Color
+         plot_bgcolor = 'rgba(0,0,0,0)',
          showlegend = FALSE) %>% 
-  animation_opts(frame = "500",
+  animation_opts(frame = "500", # Setting animation options. 
                  transition = "500",
                  easing = "linear",
-                 redraw = FALSE) %>% 
+                 redraw = TRUE) %>% 
   animation_slider(hide = TRUE)  -> ani_plot
 ```
----
-class: hide-logo
-```{r eval=TRUE, tidy=TRUE}
+]]
+</details>
+<details>
+  <summary>
+  Plot
+  </summary>
+.details[
+```{r eval=TRUE, render=FALSE, echo=FALSE}
+
 ani_plot
   
 ```
+]
+</details>
+
+---
+# Linking plots & Filters
+
+<details>
+  <summary>
+  Code Chunk Linked Plots & Filtering Options
+  </summary>
+.details[.code70[
+```{r eval=TRUE, message=FALSE, warning=FALSE, prompt=TRUE}
+library(crosstalk)
+library(openintro) # dataset
+
+shared_data <- SharedData$new(cia_factbook, 
+                              key = ~country) # This creates a shared dataframe for both plots
+
+p1 <- shared_data %>% # First Subplot
+  plot_ly(x = ~population, # X-axis vector
+          y = ~internet_users, # Y-axis vector
+          hoverinfo = "text", 
+          text = ~country) %>% # Assigning the Country name to the hover info
+  add_markers() %>% 
+  layout(title = "Internet Users vs. Total Population",
+         xaxis = list(type = "log", title = "Population"), 
+         yaxis = list(type = "log", title = "Internet Users"), # Plot Labels, Axis scaling
+         paper_bgcolor = 'rgba(0,0,0,0)',
+         plot_bgcolor = 'rgba(0,0,0,0)') %>% # Set transparent background
+  highlight(on = "plotly_click", persistent = TRUE) # Specifies what event triggers selection
+
+p2 <- shared_data %>% # Second Subplot
+  plot_ly(x = ~population_growth_rate, 
+          y = ~net_migration_rate, 
+          hoverinfo = "text", 
+          text = ~country) %>% 
+  add_markers(color = "red") %>% # Only required in bscols linked graphs
+  layout(title = "Population Growth vs Net Migration",
+         xaxis = list(type = "log", title = "Population Growth Rate"), 
+         yaxis = list(type = "log", title = "Net Migration Rate"),
+         paper_bgcolor = 'rgba(0,0,0,0)',
+         plot_bgcolor = 'rgba(0,0,0,0)') %>% 
+  highlight(on = "plotly_click", persistent = TRUE) # persistent = TRUE allows multiple selections
+
+bscols(widths = c(2, 5, 5), # Arrangement of panes in output
+       list(filter_select(id = "countries", label = "Select a Country",
+                  sharedData = shared_data, group = ~country), # Searchable Filter
+            filter_slider(id = "birthslide", label = "Birth rate",
+                 sharedData = shared_data, column = ~birth_rate), # Slider Filters
+            filter_slider(id = "deathslide", label = "Death rate",
+                 sharedData = shared_data, column = ~death_rate)),
+       p1, p2) -> linked_plot # The Two subplots
+  
+```
+]]
+</details>
+
+<details>
+  <summary>
+  Linked Plots
+  </summary>
+.details[
+```{r eval=TRUE, warning=FALSE, message=FALSE, echo=FALSE}
+linked_plot
+  
+```
+]
+</details>
+---
+
 
