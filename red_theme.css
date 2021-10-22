@@ -1,6 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
+@import url(https://cdn.rawgit.com/tonsky/FiraCode/1.204/distr/fira_code.css);
+
+body {
+  font-family: 'Quicksand','Droid Serif', 'Palatino Linotype', 'Book Antiqua', Palatino, 'Microsoft YaHei', 'Songti SC', serif;
+}
+
+.remark-code, .remark-inline-code {
+  font-family: 'Fira Code', 'Lucida Console', Monaco, monospace;
+  font-size: 80%;
+}
+
+body {
+  color: #2B2B2D
+}
+
 .remark-slide-content {
   background-color: #FAFAFA;
-  border-top: 80px solid #BA0020;
+  border-top: 80px solid #a6a6a6;
   font-size: 20px;
   font-weight: 300;
   line-height: 1.5;
@@ -12,7 +28,7 @@
 }
 
 .inverse {
-  background-color: #23373B;
+  background-color: #a6a6a6;
   text-shadow: none;
 }
 
@@ -23,9 +39,10 @@
 
 h1 {
   font-weight: normal;
-  margin-top: -95px;
+  margin-top: -85px;
   margin-left: -00px;
-  color: #FAFAFA;
+  margin-bottom: 25px;
+  color: #3F4F75;
 }
 
 h2, h3, h4 {
@@ -97,8 +114,8 @@ hr, .title-slide h2::after, .mline h1::after {
   content: '';
   display: block;
   border: none;
-  background-color: #EB811B;
-  color: #EB811B;
+  background-color: #62939A;
+  color: #62939A;
   height: 1px;
 }
 
@@ -116,7 +133,7 @@ hr, .mline h1::after {
 
 .remark-slide-number {
   font-size: 13pt;
-  color: #272822;
+  color: #62939A;
   opacity: 1;
 }
 .inverse .remark-slide-number {
@@ -251,11 +268,4 @@ hr, .mline h1::after {
 }
 .font200 {
   font-size: 200%;
-}
-
-styledimg {
-background-image: url(/hertie_logo);
-background-repeat: no-repeat;
-width: 10px;
-height: 20px;
 }
