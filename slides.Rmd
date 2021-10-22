@@ -163,10 +163,16 @@ class: center, middle
 
 ## 1. Transform a ggplot2 graphic into a plotly graphic
 ### - **ggplotly()**
+
+[Insert basic ggplotly() plot]
+
 ## 2. Directly initialize a plotly graphic 
-### - **plot_ly()**
-### - plot_geo()
-### - plot_mapbox()
+### - **plot_ly()** 
+
+[Insert basic plot_ly plot]
+
+[At this point, we can explain what each argument does]
+
     
 ---
 
@@ -185,6 +191,8 @@ class: center, middle
 ### -  aes()
 ###3. Add layers
 ### - geom_point()
+
+[Consider nixxing]
 
 ---
 # ggplot2 Refresher (continued)
@@ -238,7 +246,8 @@ install.packages("plotly")
 ---
 class: hide-logo
 # plotly animation of gapminder dataset (1/2)
-```{r eval=TRUE, tidy=TRUE}
+```{r eval=TRUE, tidy=TRUE, message=FALSE}
+
 library(plotly)
 library(gapminder)
 library(tidyverse)
@@ -261,7 +270,7 @@ gapminder %>%
 ---
 class: hide-logo
 # plotly animation of gapminder dataset (1/2)
-```{r eval=TRUE, tidy=TRUE, message=FALSE}
+```{r eval=TRUE, tidy=TRUE, message=FALSE, warning=FALSE}
 ani_plot %>% 
   layout(title = list(text = "GDP per capita vs. Life Expectancy from 1952 to 2007",
                       xanchor = "center",
