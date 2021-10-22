@@ -286,6 +286,8 @@ plot_mapbox()
 ###3. Add layers
 ### - geom_point()
 
+[Consider nixxing]
+
 ---
 # ggplot2 Refresher (continued)
 
@@ -337,6 +339,7 @@ Install the **plotly** package from [CRAN](https://cran.r-project.org/web/packag
 install.packages("plotly")
 ```
 ---
+
 # Animated Plots in plotly
 <details>
   <summary>
@@ -344,6 +347,7 @@ install.packages("plotly")
   </summary>
 .details[.code80[
 ```{r eval=TRUE, message=FALSE, warning=FALSE, prompt=TRUE}
+
 library(plotly)
 library(gapminder) # dataset
 library(tidyverse)
