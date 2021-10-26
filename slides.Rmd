@@ -29,36 +29,21 @@ background-size: 50% 50%
 ## `r Sys.Date()`
       
 ---
-class: hide-logo
-background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Plotly_logo_for_digital_final_%286%29.png/1600px-Plotly_logo_for_digital_final_%286%29.png)
-background-position: right
-background-size: contain
-
-```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
-```
-
-### Consider nixing if we include logo in title slide
-
-???
-Image credit: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Plotly-logo-01-square.png)
-
----
 
 # Overview
 
-1. What is plotly? 
+.center2[.font140[1. What is plotly? 
 1. Why plotly?
 1. How does plotly work?
 1. What can plotly do? 
 1. Key Takeaways
 1. Resources
 1. Conclusion
-
+]]
 ---
 class: hide-logo, inverse, center, middle
 
-# What is plotly? 
+# What is plotly?
 
 ---
 background-image: url("https://d33wubrfki0l68.cloudfront.net/795c039ba2520455d833b4034befc8cf360a70ba/558a5/diagrams/data-science-explore.png")
@@ -90,8 +75,15 @@ John Tukey]
 
 # Data Visualization
 
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
 .center[“The ~~simple~~ dynamic graph has brought more information to the data analyst’s mind than any other device.”
-
+</br>
+</br>
 Julian Kath & Steve Kerr]
 
 ---
@@ -320,7 +312,6 @@ ggplotly(gg)
   Grammar of Basic Plotting in plotly
   </summary>
 .details[
-.code100[
 ```{r, eval=TRUE, prompt=TRUE, message=FALSE, warning=FALSE}
 library(plotly)
 fig <- cars %>% 
@@ -331,7 +322,6 @@ fig <- cars %>%
          paper_bgcolor = 'rgba(0,0,0,0)',
          plot_bgcolor = 'rgba(0,0,0,0)')
 ```
-]
 ]
 </details>
 
@@ -344,6 +334,7 @@ fig <- cars %>%
 ```{r, echo=FALSE}
 fig
 ```
+]]
 </details>
 
 <details>
@@ -358,7 +349,6 @@ fig
 ]
 </details>
 
-### Consider separating these into separate slides?
 ---
 
 # How does plotly work? 
