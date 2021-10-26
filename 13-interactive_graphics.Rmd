@@ -128,7 +128,8 @@ fig1
 ---
 
 # Interactive Graphics
-
+</br>
+.center2[
 ```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.align='center'} 
 library(dplyr)
 library(plotly)
@@ -161,10 +162,12 @@ fig2 <- fig2 %>% layout(
 fig2
 
 ```
+]
 ---
 
 # Dynamic Graphics
-
+</br>
+.center2[
 ```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.align='center'} 
 library(plotly)
 library(gapminder)
@@ -193,7 +196,7 @@ fig3 <- fig3 %>% layout(
 fig3
 
 ```
-
+]
 ---
 background-image: url(https://i.imgflip.com/5rmjit.jpg)
 background-position: 50% 50%
@@ -276,10 +279,7 @@ class: hide-logo, inverse, center, middle
 # How does plotly work? 
 
 </br>
-### #1 Transform a **ggplot2** graphic into a **plotly** graphic
-</br>
-- **ggplotly()**
-
+1 Transform a **ggplot2** graphic into a **plotly** graphic with **ggplotly()**
 </br>
 <details>
   <summary>
@@ -288,9 +288,11 @@ class: hide-logo, inverse, center, middle
 .details[
 ```{r, eval=TRUE, message=FALSE, warning=FALSE, echo=TRUE}
 library(ggplot2)
+library(gridExtra)
 gg <- mtcars %>% 
   ggplot(aes(x = wt)) +
   geom_histogram()
+
 ```
 ]
 </details>
@@ -301,26 +303,22 @@ gg <- mtcars %>%
   </summary>
 .details[
 ```{r, eval=TRUE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4}
-ggplotly(gg) 
+ggplotly(gg)
+
 ```
 ]
 </details>
-### Could conisder moving the example to its own slide
 
-### #2 Directly initialize a **plotly** graphic 
-</br>
-- **plot_ly()**
+Directly initialize a **plotly** graphic with **plot_ly()**
 
     
 ---
-
 # #1 plotly
 <details>
   <summary>
   Grammar of Basic Plotting in plotly
   </summary>
 .details[
-.code100[
 ```{r, eval=TRUE, prompt=TRUE, message=FALSE, warning=FALSE}
 library(plotly)
 fig <- cars %>% 
@@ -331,7 +329,6 @@ fig <- cars %>%
          paper_bgcolor = 'rgba(0,0,0,0)',
          plot_bgcolor = 'rgba(0,0,0,0)')
 ```
-]
 ]
 </details>
 
@@ -344,8 +341,8 @@ fig <- cars %>%
 ```{r, echo=FALSE}
 fig
 ```
+]]
 </details>
-
 <details>
   <summary>
   Takeaways
@@ -358,7 +355,6 @@ fig
 ]
 </details>
 
-### Consider separating these into separate slides?
 ---
 
 # How does plotly work? 
@@ -505,8 +501,9 @@ gapminder %>%
   <summary>
   Plot
   </summary>
+</br>
 .details[
-```{r eval=TRUE, render=FALSE, echo=FALSE}
+```{r eval=TRUE, echo=FALSE}
 
 ani_plot
   
