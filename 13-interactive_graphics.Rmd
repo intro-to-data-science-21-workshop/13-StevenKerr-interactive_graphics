@@ -92,6 +92,7 @@ Julian Kath & Steve Kerr]]
 ---
 
 # Types of Graphics
+<<<<<<< HEAD
 
 <details>
   <summary>
@@ -99,40 +100,58 @@ Julian Kath & Steve Kerr]]
   </summary>
 .details[.center[
 ```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.align='center'} 
+=======
+</details>
+<details>
+  <summary>
+  Static Graphics
+  </summary>
+.details[
+```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=7, fig.width=12} 
+>>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
 library(dplyr)
 library(ggplot2)
 library(gapminder)
 
-df <- gapminder %>% 
-  filter(year == '2007')
-fig1 <- df %>% 
-  ggplot(aes(x = gdpPercap, y = lifeExp)) + geom_point(aes(color = continent, size = pop), alpha = (3/4))
-
-### log gdpPercap
-### update labels 
-### make clear that this is for one year (2007) 
-### update color palette to remain consistent across static, interactive, and dynamic plots
-
-fig1
+gapminder %>% 
+  filter(year == '2007') %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp)) + 
+  geom_point(aes(color = continent, size = pop), alpha = (3/4)) +
+  labs(x = "GDP per capita", 
+       y = "Life Expectancy", 
+       colour = "Continent",
+       size = "Population",
+       title = "GDP per capita vs. Life Expectancy",
+       caption = "(based on data from 2007)") +
+  theme_minimal()
 ```
+<<<<<<< HEAD
 ]]
+=======
+]
+>>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
 </details>
 
 <details>
   <summary>
+<<<<<<< HEAD
 2. Interactive
   </summary>
 .details[
 ```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.align='center'} 
+=======
+  Interactive Graphics
+  </summary>
+.details[
+```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=7, fig.width=12} 
+>>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
 library(dplyr)
 library(plotly)
 library(gapminder)
 
 ### Supress misc messages
-
-df <- gapminder %>% 
-  filter(year == '2007')
-fig2 <- df %>%
+gapminder %>% 
+  filter(year == '2007') %>%
   plot_ly(
     x = ~gdpPercap, 
     y = ~lifeExp, 
@@ -142,17 +161,17 @@ fig2 <- df %>%
     hoverinfo = "text",
     type = 'scatter',
     mode = 'markers'
-  )
-fig2 <- fig2 %>% layout(
+  ) %>% 
+  layout(title = "GDP per capita vs. Life Expectancy in 2007",
     xaxis = list(
       type = "log"
-    )
+    ),
+    paper_bgcolor = 'rgba(0,0,0,0)',
+    plot_bgcolor = 'rgba(0,0,0,0)'
   )
 
 ### show that data is only one year (2007)
 ### Center output
-
-fig2
 
 ```
 ]
@@ -160,17 +179,23 @@ fig2
 
 <details>
   <summary>
+<<<<<<< HEAD
 3. Dynamic
   </summary>
 .details[
 ```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.align='center'} 
+=======
+  Dynamic Graphics
+  </summary>
+.details[
+```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=7, fig.width=12} 
+>>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
 library(plotly)
 library(gapminder)
 
 ### Find way to center output
 
-df <- gapminder 
-fig3 <- df %>%
+gapminder  %>%
   plot_ly(
     x = ~gdpPercap, 
     y = ~lifeExp, 
@@ -181,8 +206,9 @@ fig3 <- df %>%
     hoverinfo = "text",
     type = 'scatter',
     mode = 'markers'
-  )
-fig3 <- fig3 %>% layout(
+  ) %>% 
+  layout(
+    title = "GDP pre capita vs. Life Expectancy 1952-2007",
     xaxis = list(
       type = "log"
     ),
@@ -190,18 +216,22 @@ fig3 <- fig3 %>% layout(
     plot_bgcolor = 'rgba(0,0,0,0)'
   )
 
-fig3
 
 ```
 ]
 </details>
+<<<<<<< HEAD
 
 ---
 background-image: url(https://i.imgflip.com/5rmjit.jpg)
 background-position: 50% 50%
+=======
+>>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
 
-???
-Image credit: [Imgflip](https://imgflip.com/i/5rmjit)
+--
+.center[
+![Imgflip](https://i.imgflip.com/5rmjit.jpg)
+]
 
 ---
 
@@ -248,10 +278,16 @@ plot_ly(viz_data, x = ~libraries,
     title = "Plotting libraries in R",
     xaxis = list(title = "Library"),
     yaxis = list(title = "Number of Forks/ Stars/ Watchers"),
-         paper_bgcolor = 'rgba(0,0,0,0)',
-         plot_bgcolor = 'rgba(0,0,0,0)',
-         autosize = FALSE, width = 550, 
-         height = 400, margin = list(l = 60, r = 50, b = 5, t = 25, pad = 5))
+    paper_bgcolor = 'rgba(0,0,0,0)',
+    plot_bgcolor = 'rgba(0,0,0,0)',
+    autosize = FALSE, width = 550, 
+    height = 400, 
+    margin = list(l = 60, 
+                  r = 50, 
+                  b = 5, 
+                  t = 25, 
+                  pad = 5)
+    )
 
 ### Adapt color of plot to match the slides 
 ### Consider reordering in descending/ascending order 
@@ -279,7 +315,8 @@ class: hide-logo, inverse, center, middle
 # How does plotly work? 
 
 </br>
-1 Transform a **ggplot2** graphic into a **plotly** graphic with **ggplotly()**
+.font70[
+Transform a **ggplot2** graphic into a **plotly** graphic with **ggplotly()**
 </br>
 <details>
   <summary>
@@ -288,37 +325,65 @@ class: hide-logo, inverse, center, middle
 .details[
 ```{r, eval=TRUE, message=FALSE, warning=FALSE, echo=TRUE}
 library(ggplot2)
-library(gridExtra)
 gg <- mtcars %>% 
   ggplot(aes(x = wt)) +
-  geom_histogram()
-
+  geom_histogram(bins = 10, binwidth = 0.5)
+p_gg <- ggplotly(gg)
 ```
 ]
 </details>
 
 <details>
   <summary>
-  Plot
+  ggplot
   </summary>
 .details[
-```{r, eval=TRUE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4}
-ggplotly(gg)
+```{r, fig.width=5, fig.height=4, eval=TRUE, warning=FALSE, message=FALSE, echo=FALSE}
+gg
+```
+]
+</details>
 
+<details>
+  <summary>
+  ggplotly
+  </summary>
+.details[
+```{r, message=FALSE, warning=FALSE, fig.width=5, fig.height=4, fig.align='center', echo=FALSE}
+p_gg
 ```
 ]
 </details>
 
 Directly initialize a **plotly** graphic with **plot_ly()**
+</br>
+<details>
+  <summary>
+  plot_ly
+  </summary>
+.details[
+```{r, message=FALSE, warning=FALSE, fig.width=5, fig.height=4, fig.align='center', echo=FALSE}
+mtcars %>% 
+  plot_ly(x = ~wt) %>% 
+  add_histogram(nbins=10, xbins=list(size=0.5))
+```
+]
+</details>
 
-    
+
+]
 ---
 # #1 plotly
 <details>
   <summary>
   Grammar of Basic Plotting in plotly
   </summary>
+<<<<<<< HEAD
 .details[.code100[
+=======
+.details[
+.code180[
+>>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
 ```{r, eval=TRUE, prompt=TRUE, message=FALSE, warning=FALSE}
 library(plotly)
 fig <- cars %>% 
@@ -329,7 +394,12 @@ fig <- cars %>%
          paper_bgcolor = 'rgba(0,0,0,0)',
          plot_bgcolor = 'rgba(0,0,0,0)')
 ```
+<<<<<<< HEAD
 ]]
+=======
+]
+]
+>>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
 </details>
 
 <details>
@@ -342,6 +412,20 @@ fig <- cars %>%
 fig
 ```
 ]]
+</details>
+
+<details>
+  <summary>
+  Key Terms
+  </summary>
+.details[
+* **Grammar of Graphics**
+* Trace: the data
+* Trace Type: ex. histogram, pie, scatter, etc.
+* Attribute: the style
+]
+</details>
+
 </details>
 <details>
   <summary>
@@ -357,19 +441,6 @@ fig
 
 ---
 
-# How does plotly work? 
-
-- Grammar of Graphics
-    - similar to ggplot2
-- Key Terms
-    - Trace: the data
-    - Trace Type: ex. histogram, pie, scatter, etc.
-    - Attribute: the style
-    
-#### Consider merging this info with the previous Grammar of Graphics slide
-
----
-
 # #1 ggplot2 → plotly
 
 - If you use ggplot2, **ggplotly()** converts your static plot to an interactive web-based version! 
@@ -377,41 +448,6 @@ fig
 - This functionality can be really helpful for quickly adding interactivity to your existing ggplot2 workflow
 
 ### Could insert ggplotly example here 
-
----
-
-# ggplot2 Refresher
-
-### Grammar of Graphics:
-</br>
-1. Data
-1. Aesthetics
-  - aes()
-1. Add layers
-  - geom_point()
-
-### Consider nixing
-
----
-# ggplot2 Refresher (continued)
-
-- By default, ggplotly() tries to replicate the static ggplot2 version exactly 
-- Some useful ones include layout() (for customizing the layout), 
-- add_traces() (and its higher-level add_*() siblings, for example add_polygons(), for adding new traces/data), 
-- subplot() (for combining multiple plotly objects)
-
----
-
-# #2 plotly
-
-## Grammar of Graphics (similar to ggplot2):
-</br>
-1. Trace
-  - the data
-1. Trace Type
-  - ex. histogram, pie, scatter, etc.
-1. Attribute
-  - visual and/or interactive properties
 
 ---
 

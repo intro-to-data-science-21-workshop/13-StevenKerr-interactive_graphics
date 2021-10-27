@@ -204,6 +204,30 @@ hr, .mline h1::after {
   font-size: 100%;
 }
 
+.code120 .remark-code {
+  font-size: 120%;
+}
+
+.code140 .remark-code {
+  font-size: 140%;
+}
+
+.code160 .remark-code {
+  font-size: 160%;
+}
+
+.code180 .remark-code {
+  font-size: 180%;
+}
+
+.code190 .remark-code {
+  font-size: 190%;
+}
+
+.code200 .remark-code {
+  font-size: 200%;
+}
+
 .font10 {
   font-size: 10%;
 }
