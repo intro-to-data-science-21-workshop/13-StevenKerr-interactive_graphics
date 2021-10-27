@@ -7,7 +7,7 @@ date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     seal: false
-    css: [default, red_theme.css] #consider editing theme 
+    css: [default, red_theme.css]
     lib_dir: libs
     includes:
       after_body: insert_logo.html
@@ -32,16 +32,24 @@ background-size: 50% 50%
 
 # Overview
 
-.pull-left[.font160[1. What is plotly? 
+.pull-left[.font160[
+<br>
+</br>
+1. What is plotly? 
 1. Why plotly?
 1. How does plotly work?
 1. What can plotly do? 
-1. Key Takeaways
+1. Conclusion
 1. Resources
-1. Let's Practice
+1. Let's Practice!
 ]]
 
 .pull-right[
+</br>
+</br>
+</br>
+</br>
+</br>
 ![Image](https://imgs.xkcd.com/comics/scientific_paper_graph_quality_2x.png)
 ]
 
@@ -92,23 +100,25 @@ Julian Kath & Steve Kerr]]
 ---
 
 # Types of Graphics
-<<<<<<< HEAD
+
+.center[.center2[.font200[
+<br></br>
+# 1. Static
+<br></br>
+# 2. Interactive
+<br></br>
+# 3. Dynamic
+]]]
+---
+
+# Types of Graphics
 
 <details>
   <summary>
 1. Static
   </summary>
 .details[.center[
-```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.align='center'} 
-=======
-</details>
-<details>
-  <summary>
-  Static Graphics
-  </summary>
-.details[
 ```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=7, fig.width=12} 
->>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
 library(dplyr)
 library(ggplot2)
 library(gapminder)
@@ -121,35 +131,25 @@ gapminder %>%
        y = "Life Expectancy", 
        colour = "Continent",
        size = "Population",
-       title = "GDP per capita vs. Life Expectancy",
+       title = "GDP per capita vs. Life Expectancy in 2007",
        caption = "(based on data from 2007)") +
-  theme_minimal()
+  theme_minimal() + 
+  scale_x_continuous(trans='log10')
 ```
-<<<<<<< HEAD
 ]]
-=======
-]
->>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
 </details>
 
 <details>
   <summary>
-<<<<<<< HEAD
 2. Interactive
   </summary>
 .details[
-```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.align='center'} 
-=======
-  Interactive Graphics
-  </summary>
-.details[
+
 ```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=7, fig.width=12} 
->>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
 library(dplyr)
 library(plotly)
 library(gapminder)
 
-### Supress misc messages
 gapminder %>% 
   filter(year == '2007') %>%
   plot_ly(
@@ -179,17 +179,10 @@ gapminder %>%
 
 <details>
   <summary>
-<<<<<<< HEAD
 3. Dynamic
   </summary>
 .details[
-```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.align='center'} 
-=======
-  Dynamic Graphics
-  </summary>
-.details[
 ```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=7, fig.width=12} 
->>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
 library(plotly)
 library(gapminder)
 
@@ -215,50 +208,45 @@ gapminder  %>%
     paper_bgcolor = 'rgba(0,0,0,0)',
     plot_bgcolor = 'rgba(0,0,0,0)'
   )
-
-
 ```
 ]
 </details>
-<<<<<<< HEAD
 
 ---
-background-image: url(https://i.imgflip.com/5rmjit.jpg)
-background-position: 50% 50%
-=======
->>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
 
---
-.center[
+# Types of Graphics 
+
+.center2[
 ![Imgflip](https://i.imgflip.com/5rmjit.jpg)
 ]
 
 ---
 
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Plotly_logo_for_digital_final_%286%29.png/1600px-Plotly_logo_for_digital_final_%286%29.png)
-background-position: center
-background-size: contain
+background-position: bottom
+background-size: 75% 75% 
 
 # What is plotly?
 
+.font150[
 plotly is an R package for creating **interactive** and **dynamic** **web-based** graphics  
 
 1. Audiences can directly **interact** with your data
 1. **Dynamic** graphics change automatically
 1. **Web-based** graphics can be easily shared 
-
+]
 ---
 class: hide-logo, inverse, center, middle
 
-# Why plotly? 
+# **Why plotly?** 
 
 ---
 
 # Why plotly?
-<br/>
-.right-column[
-```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.align='center'}
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.height=20, fig.width=20}
 library(plotly)
+
 
 data.frame(libraries = c("plotly.R", "rbokeh", "trellisopejs", "dygraphs", "ggvis", "ggplot2"),
            github_stars = c(2100, 293, 217, 328, 700, 5100),
@@ -286,29 +274,29 @@ plot_ly(viz_data, x = ~libraries,
                   r = 50, 
                   b = 5, 
                   t = 25, 
-                  pad = 5)
-    )
+                  pad = 5))
 
 ### Adapt color of plot to match the slides 
 ### Consider reordering in descending/ascending order 
-### Consider moving 'strenghts of interactive plotting' content to its own slide
+### Consider moving 'strengths of interactive plotting' content to its own slide
 ```
-]
-</br>
-</br>
-.left-column[.font80[
+
+---
+
+# Why plotly? 
+.font80[
 ####Strengths of interactive Plotting:
 </br>
 - Complex Information
 - High-dimensional Data
 - Exploratory Data Analysis
 - Engaging Viewer Experience
-]]
+]
 
 ---
 class: hide-logo, inverse, center, middle
 
-# How does plotly work? 
+# **How does plotly work?**
 
 ---
 
@@ -378,12 +366,9 @@ mtcars %>%
   <summary>
   Grammar of Basic Plotting in plotly
   </summary>
-<<<<<<< HEAD
-.details[.code100[
-=======
 .details[
 .code180[
->>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
+
 ```{r, eval=TRUE, prompt=TRUE, message=FALSE, warning=FALSE}
 library(plotly)
 fig <- cars %>% 
@@ -394,13 +379,9 @@ fig <- cars %>%
          paper_bgcolor = 'rgba(0,0,0,0)',
          plot_bgcolor = 'rgba(0,0,0,0)')
 ```
-<<<<<<< HEAD
+
 ]]
-=======
-]
-]
->>>>>>> 63129b82ad7ad6c84d9119bede66fa3d11f37496
-</details>
+
 
 <details>
   <summary>
@@ -461,7 +442,7 @@ fig
 ---
 class: hide-logo, inverse, center, middle
 
-# What else can plotly do? 
+# **What else can plotly do?** 
 
 ---
 
@@ -615,19 +596,33 @@ linked_plot
 ---
 class: hide-logo, inverse, center, middle
 
-# Key Takeaways
+# **Conlcusion**
 
 ---
-# Key Takeaways
+# Conclusion
 
-- plotly is an R package for creating **interactive** and **dynamic** **web-based** graphics  
+.font140[
+- plotly is an R package for creating **interactive** and **dynamic** **web-based** graphics
+<br>
+</br>
 - plotly graphics can be created by (1) converting ggplot() graphics and (2) initializing directly with plot_ly()
-- Key features include the ability to animate graphs, links plots & filters, allow audience to interact with your data 
-
+<br>
+</br>
+- Key features include the ability to animate graphs, links plots & filters, allow audience to interact with your data
+<br>
+</br>
+- plotly can be complicated. It may get frustrating. 
+<br>
+</br>
+- Setting up the layout requires a lot of code
+<br>
+</br>
+- plotly might not always be the right tool!
+]
 ---
 class: hide-logo, inverse, center, middle
 
-# Resources
+# **Resources**
 
 ---
 
@@ -651,5 +646,5 @@ background-image: url(https://imgs.xkcd.com/comics/scientific_paper_graph_qualit
 --- 
 class: hide-logo, inverse, center, middle
 
-# Let's practice!
+# **Let's practice!**
 
