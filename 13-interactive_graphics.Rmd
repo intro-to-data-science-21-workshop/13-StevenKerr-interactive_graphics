@@ -22,7 +22,7 @@ background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/
 background-position: right
 background-size: 50% 50%
 
-# .center[Interactive Plotting with plotly in R]
+# .center[**Interactive Plotting with plotly in R**]
 --------------------------------------
 ## Steve Kerr & Julian Kath
 ## Hertie School 
@@ -32,44 +32,34 @@ background-size: 50% 50%
 
 # Overview
 
-.center2[.font140[1. What is plotly? 
+.pull-left[.font160[1. What is plotly? 
 1. Why plotly?
 1. How does plotly work?
 1. What can plotly do? 
 1. Key Takeaways
 1. Resources
-1. Conclusion
+1. Let's Practice
 ]]
+
+.pull-right[
+![Image](https://imgs.xkcd.com/comics/scientific_paper_graph_quality_2x.png)
+]
+
+
 ---
 class: hide-logo, inverse, center, middle
 
-# What is plotly?
+# **What is plotly?**
 
 ---
-background-image: url("https://d33wubrfki0l68.cloudfront.net/795c039ba2520455d833b4034befc8cf360a70ba/558a5/diagrams/data-science-explore.png")
+background-image: url("https://d33wubrfki0l68.cloudfront.net/3e0445f7fc16698cc4402445259d84aa411dddc3/9abcb/diagrams/data-science-communicate.png")
 background-position: center
 background-size: contain
 
 # Data Visualization
 
 ???
-Image credit: [R for Data Science, Ch. 2](https://r4ds.had.co.nz/explore-intro.html)
-
----
-
-
-# Data Visualization
-
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-.center[“The simple graph has brought more information to the data analyst’s mind than any other device.” 
-</br>
-</br>
-John Tukey]
+Image credit: [R for Data Science, Ch. 26](https://r4ds.had.co.nz/explore-intro.html)
 
 ---
 
@@ -80,24 +70,34 @@ John Tukey]
 </br>
 </br>
 </br>
+.font180[.center[“The simple graph has brought more information to the data analyst’s mind than any other device.” 
 </br>
-.center[“The ~~simple~~ dynamic graph has brought more information to the data analyst’s mind than any other device.”
+</br>
+John Tukey]]
+
+---
+
+# Data Visualization
+
 </br>
 </br>
-Julian Kath & Steve Kerr]
+</br>
+</br>
+</br>
+.font200[.center[“The ~~simple~~ dynamic graph has brought more information to the data analyst’s mind than any other device.”
+</br>
+</br>
+Julian Kath & Steve Kerr]]
 
 ---
 
 # Types of Graphics
 
+<details>
+  <summary>
 1. Static
-1. Interactive
-1. Dynamic
-
----
-
-# Static Graphics
-
+  </summary>
+.details[.center[
 ```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.align='center'} 
 library(dplyr)
 library(ggplot2)
@@ -115,13 +115,14 @@ fig1 <- df %>%
 
 fig1
 ```
+]]
+</details>
 
-
----
-
-# Interactive Graphics
-</br>
-.center2[
+<details>
+  <summary>
+2. Interactive
+  </summary>
+.details[
 ```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.align='center'} 
 library(dplyr)
 library(plotly)
@@ -155,11 +156,13 @@ fig2
 
 ```
 ]
----
+</details>
 
-# Dynamic Graphics
-</br>
-.center2[
+<details>
+  <summary>
+3. Dynamic
+  </summary>
+.details[
 ```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.align='center'} 
 library(plotly)
 library(gapminder)
@@ -182,13 +185,17 @@ fig3 <- df %>%
 fig3 <- fig3 %>% layout(
     xaxis = list(
       type = "log"
-    )
+    ),
+    paper_bgcolor = 'rgba(0,0,0,0)',
+    plot_bgcolor = 'rgba(0,0,0,0)'
   )
 
 fig3
 
 ```
 ]
+</details>
+
 ---
 background-image: url(https://i.imgflip.com/5rmjit.jpg)
 background-position: 50% 50%
@@ -197,6 +204,7 @@ background-position: 50% 50%
 Image credit: [Imgflip](https://imgflip.com/i/5rmjit)
 
 ---
+
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Plotly_logo_for_digital_final_%286%29.png/1600px-Plotly_logo_for_digital_final_%286%29.png)
 background-position: center
 background-size: contain
@@ -310,7 +318,7 @@ Directly initialize a **plotly** graphic with **plot_ly()**
   <summary>
   Grammar of Basic Plotting in plotly
   </summary>
-.details[
+.details[.code100[
 ```{r, eval=TRUE, prompt=TRUE, message=FALSE, warning=FALSE}
 library(plotly)
 fig <- cars %>% 
@@ -321,7 +329,7 @@ fig <- cars %>%
          paper_bgcolor = 'rgba(0,0,0,0)',
          plot_bgcolor = 'rgba(0,0,0,0)')
 ```
-]
+]]
 </details>
 
 <details>
@@ -571,6 +579,18 @@ linked_plot
 ---
 class: hide-logo, inverse, center, middle
 
+# Key Takeaways
+
+---
+# Key Takeaways
+
+- plotly is an R package for creating **interactive** and **dynamic** **web-based** graphics  
+- plotly graphics can be created by (1) converting ggplot() graphics and (2) initializing directly with plot_ly()
+- Key features include the ability to animate graphs, links plots & filters, allow audience to interact with your data 
+
+---
+class: hide-logo, inverse, center, middle
+
 # Resources
 
 ---
@@ -582,15 +602,14 @@ If you're interested in learning more about plotly, check these out:
 - 
 - 
 
---- 
-
-# Conclusion
-
-- plotly is an R package for creating **interactive** and **dynamic** **web-based** graphics  
-- plotly graphics can be created by (1) converting ggplot() graphics and (2) initializing directly with plot_ly()
-- Key features include the ability to animate graphs, links plots & filters, allow audience to interact with your data 
-
 ---
+
+# References 
+
+- 
+- 
+- 
+--- 
 background-image: url(https://imgs.xkcd.com/comics/scientific_paper_graph_quality_2x.png)
 
 --- 
