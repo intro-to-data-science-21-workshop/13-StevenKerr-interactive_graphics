@@ -113,12 +113,13 @@ Julian Kath & Steve Kerr]]
 
 # Types of Graphics
 
+.font100[
 <details>
   <summary>
-1. Static
+Static
   </summary>
 .details[.center[
-```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=7, fig.width=12} 
+```{r static, message = FALSE, echo = FALSE, warning = FALSE, fig.height=7, fig.width=12} 
 library(dplyr)
 library(ggplot2)
 library(gapminder)
@@ -141,11 +142,11 @@ gapminder %>%
 
 <details>
   <summary>
-2. Interactive
+Interactive
   </summary>
 .details[
 
-```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=7, fig.width=12} 
+```{r interactive, message = FALSE, echo = FALSE, warning = FALSE, fig.height=7, fig.width=12} 
 library(dplyr)
 library(plotly)
 library(gapminder)
@@ -179,10 +180,10 @@ gapminder %>%
 
 <details>
   <summary>
-3. Dynamic
+Dynamic
   </summary>
 .details[
-```{r, message = FALSE, echo = FALSE, warning = FALSE, fig.height=7, fig.width=12} 
+```{r dynamic, message = FALSE, echo = FALSE, warning = FALSE, fig.height=7, fig.width=12} 
 library(plotly)
 library(gapminder)
 
@@ -209,8 +210,10 @@ gapminder  %>%
     plot_bgcolor = 'rgba(0,0,0,0)'
   )
 ```
-]
+]]
 </details>
+
+### Dynamic plot is no longer rendering...
 
 ---
 
@@ -244,7 +247,9 @@ class: hide-logo, inverse, center, middle
 
 # Why plotly?
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.height=20, fig.width=20}
+### this plot refuses to move to the center >.<
+
+```{r ranking, message=FALSE, warning=FALSE, echo=FALSE}
 library(plotly)
 
 
@@ -275,23 +280,22 @@ plot_ly(viz_data, x = ~libraries,
                   b = 5, 
                   t = 25, 
                   pad = 5))
-
-### Adapt color of plot to match the slides 
-### Consider reordering in descending/ascending order 
-### Consider moving 'strengths of interactive plotting' content to its own slide
 ```
+### we could consider taking a screenshot of it and including as an image
 
 ---
 
 # Why plotly? 
-.font80[
-####Strengths of interactive Plotting:
+.font200[
+Strengths of interactive Plotting:
 </br>
 - Complex Information
-- High-dimensional Data
-- Exploratory Data Analysis
-- Engaging Viewer Experience
+- High-dimensional data
+- Exploratory data analysis
+- Engaging viewer experience
 ]
+
+### maybe consider including in the script rather than the slide?  
 
 ---
 class: hide-logo, inverse, center, middle
@@ -302,16 +306,90 @@ class: hide-logo, inverse, center, middle
 
 # How does plotly work? 
 
+.font140[
+## 1. Transform **ggplot** graphics into **plotly** graphics with **ggplotly()**
+]
+
+--
+
 </br>
-.font70[
-Transform a **ggplot2** graphic into a **plotly** graphic with **ggplotly()**
+.code160[
+```{r ggplotly}
+library(ggplot2)
+
+ggplot <- ggplot(data = mtcars, aes(x = wt, y = mpg)) + 
+  geom_point(size = 4)
+
+ggplotly <- ggplotly(ggplot)
+
+```
+]
+
+--
 </br>
+.font140[
+## 2. Initialize **plotly** graphics directly with **plot_ly()**
+]
+--
+</br>
+.code160[
+```{r plotly}
+library(plotly)
+
+plotly <- plot_ly(mtcars, x = ~wt, y = ~mpg)
+```
+]
+
+---
+
+# #1 ggplot →️ plotly
+
+.font130[
+- If you use ggplot2, **ggplotly()** converts your static plot to an interactive web-based version! 
+<br></br>
+- This functionality can be really helpful for quickly adding interactivity to your existing ggplot2 workflow
+]
+
+<br></br>
+
+--
+.center[
+![Level Up](https://media3.giphy.com/media/qfridHRcLlMLMtWueu/giphy.gif?cid=ecf05e47p7c96cu7pi9td856dcfckt7rsk2mcwfaf1g58qrj&rid=giphy.gif&ct=g)
+]
+
+---
+
+# #1 ggplot →️ plotly
+
+.code120[
+```{r cars, figures-side, eval=TRUE, message=FALSE, warning=FALSE, echo=TRUE, fig.width=5, fig.height=4}
+library(ggplot2)
+library(plotly)
+
+gg <- mtcars %>% 
+  ggplot(aes(x = wt)) +
+  geom_histogram(bins = 10, binwidth = 0.5)
+
+p_gg <- ggplotly(gg)
+p_gg
+```
+]
+### ggplot will display but not ggplotly 
+### Trouble shoot(https://stackoverflow.com/questions/59144842/why-does-ggplotly-does-not-work-in-rmarkdown-the-same-way-ggplot-does)
+
+```{r subplot, eval=TRUE, warning=FALSE, message=FALSE, echo=TRUE}
+fig <- subplot(gg, p_gg)
+
+fig
+```
+
+---
 <details>
   <summary>
   Example
   </summary>
 .details[
-```{r, eval=TRUE, message=FALSE, warning=FALSE, echo=TRUE}
+```{r ggplotly2, eval=TRUE, message=FALSE, warning=FALSE, echo=TRUE, fig.width=5, fig.height=4}
 library(ggplot2)
 gg <- mtcars %>% 
   ggplot(aes(x = wt)) +
@@ -337,39 +415,38 @@ gg
   ggplotly
   </summary>
 .details[
-```{r, message=FALSE, warning=FALSE, fig.width=5, fig.height=4, fig.align='center', echo=FALSE}
+```{r ggplotly3, message=FALSE, warning=FALSE, fig.width=5, fig.height=4, fig.align='center', echo=FALSE}
 p_gg
 ```
 ]
 </details>
 
-Directly initialize a **plotly** graphic with **plot_ly()**
-</br>
-<details>
-  <summary>
-  plot_ly
-  </summary>
-.details[
-```{r, message=FALSE, warning=FALSE, fig.width=5, fig.height=4, fig.align='center', echo=FALSE}
-mtcars %>% 
-  plot_ly(x = ~wt) %>% 
-  add_histogram(nbins=10, xbins=list(size=0.5))
-```
-]
-</details>
+---
 
+# #1 ggplot →️ plotly
 
+<br></br>
+.font160[
+- By default, ggplotly() tries to replicate the static ggplot2 version exactly 
+- Some useful ones include layout() (for customizing the layout), 
+- add_traces() (and its higher-level add_*() siblings, for example add_polygons(), for adding new traces/data), 
+- subplot() (for combining multiple plotly objects)
 ]
 ---
-# #1 plotly
-<details>
-  <summary>
-  Grammar of Basic Plotting in plotly
-  </summary>
-.details[
-.code180[
 
-```{r, eval=TRUE, prompt=TRUE, message=FALSE, warning=FALSE}
+# #2 plotly 
+
+```{r cars2, eval=TRUE, message=FALSE, warning=FALSE, fig.width=5, fig.height=4, fig.align='center', echo=FALSE}
+fig <- mtcars %>% 
+  plot_ly(x = ~wt) %>% 
+  add_histogram(nbins=10, xbins=list(size=0.5))
+
+fig
+```
+
+### plotly graphic not displaying 
+
+```{r cars3, eval=TRUE, prompt=TRUE, message=FALSE, warning=FALSE}
 library(plotly)
 fig <- cars %>% 
   plot_ly(x = ~speed, y = ~dist) %>% 
@@ -378,66 +455,27 @@ fig <- cars %>%
                       x = 0.1, y = 0.01),
          paper_bgcolor = 'rgba(0,0,0,0)',
          plot_bgcolor = 'rgba(0,0,0,0)')
-```
 
-]]
-
-
-<details>
-  <summary>
-  Plot
-  </summary>
-.details[
-.code10[
-```{r, echo=FALSE}
 fig
 ```
-]]
-</details>
-
-<details>
-  <summary>
-  Key Terms
-  </summary>
-.details[
-* **Grammar of Graphics**
-* Trace: the data
-* Trace Type: ex. histogram, pie, scatter, etc.
-* Attribute: the style
-]
-</details>
-
-</details>
-<details>
-  <summary>
-  Takeaways
-  </summary>
-.details[
-* Call plotly with **plot_ly** and map variables
-* Chain traces with pipes **%>%** 
-* Always pass variables with a tilde **~** 
-* You will oftentimes need to pass parameters in **lists**!
-]
-</details>
 
 ---
+# #2 plotly 
 
-# #1 ggplot2 → plotly
+## Grammar of Graphics
+.font160[
+- Trace: the data
+- Trace Type: ex. histogram, pie, scatter, etc.
+- Attribute: the style
+]
 
-- If you use ggplot2, **ggplotly()** converts your static plot to an interactive web-based version! 
-</br>
-- This functionality can be really helpful for quickly adding interactivity to your existing ggplot2 workflow
-
-### Could insert ggplotly example here 
-
----
-
-# #2 plotly (continued)
-
-- By default, ggplotly() tries to replicate the static ggplot2 version exactly 
-- Some useful ones include layout() (for customizing the layout), 
-- add_traces() (and its higher-level add_*() siblings, for example add_polygons(), for adding new traces/data), 
-- subplot() (for combining multiple plotly objects)
+## Pro Tips
+.font160[
+- Call plotly with **plot_ly** and map variables
+- Chain traces with pipes **%>%** 
+- Always pass variables with a tilde **~** 
+- You will oftentimes need to pass parameters in **lists**!
+]
 
 ---
 class: hide-logo, inverse, center, middle
@@ -450,34 +488,24 @@ class: hide-logo, inverse, center, middle
 
 .center2[![plots and charts and boxes](https://i.imgflip.com/5qzavw.jpg)]
 
-### This info may be redundant at this point in the presentation. Either incorporate earlier or nix
+### This info may be redundant at this point in the presentation. Either incorporate earlier or nix.
+### Maybe feature in tutorial? 
 
 ---
 # What else can plotly do?
-
 
 .center2[![plotly gallery](https://upload.wikimedia.org/wikipedia/en/0/0a/Gallery_of_Plotly_Graphs.png)
 ]
 
 ### This info may be redundant at this point in the presentation. Either incorporate earlier or nix
-
----
-# Installation
-Install the **plotly** package from [CRAN](https://cran.r-project.org/web/packages/plotly/index.html):
-
-```{r eval=FALSE, tidy=FALSE}
-install.packages("plotly")
-```
-
-### This slide may be better for the tutorial session 
 ---
 
-# Animated Plots in plotly
+# Animated Plots
 <details>
   <summary>
   Code chunk
   </summary>
-.details[.code80[
+.details.code80[
 ```{r eval=TRUE, message=FALSE, warning=FALSE, prompt=TRUE}
 
 library(plotly)
@@ -512,7 +540,7 @@ gapminder %>%
                  redraw = TRUE) %>% 
   animation_slider(hide = TRUE)  -> ani_plot
 ```
-]]
+]
 </details>
 <details>
   <summary>
@@ -529,7 +557,7 @@ ani_plot
 </details>
 
 ---
-# Linking plots & Filters
+# Linking Plots 
 
 <details>
   <summary>
@@ -593,10 +621,17 @@ linked_plot
 ```
 ]
 </details>
+
+---
+# Filters
+
+--- 
+# Subplots
+
 ---
 class: hide-logo, inverse, center, middle
 
-# **Conlcusion**
+# **Conclusion**
 
 ---
 # Conclusion
