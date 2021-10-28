@@ -22,6 +22,10 @@ background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/
 background-position: right
 background-size: 50% 50%
 
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
 # .center[**Interactive Plotting with plotly in R**]
 --------------------------------------
 ## Steve Kerr & Julian Kath
@@ -173,15 +177,12 @@ gapminder %>%
   )
 
 ```
-]
+]]
 </details>
 
-<details>
-  <summary>
-Dynamic
-  </summary>
-.details[
-```{r dynamic, message=FALSE, echo=FALSE, warning=FALSE, fig.height=7, fig.width=12} 
+---
+
+```{r dynamic, message = FALSE, echo = FALSE, warning = FALSE, fig.height = 7, fig.width = 12} 
 library(dplyr) 
 library(plotly)
 library(gapminder)
@@ -206,8 +207,7 @@ gapminder  %>%
     plot_bgcolor = 'rgba(0,0,0,0)'
   )
 ```
-]]
-</details>
+
 
 ---
 
