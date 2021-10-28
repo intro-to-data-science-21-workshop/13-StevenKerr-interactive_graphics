@@ -247,8 +247,6 @@ class: hide-logo, inverse, center, middle
 
 # Why plotly?
 
-### this plot refuses to move to the center >.<
-
 ```{r ranking, message=FALSE, warning=FALSE, echo=FALSE}
 library(plotly)
 
@@ -281,7 +279,6 @@ plot_ly(viz_data, x = ~libraries,
                   t = 25, 
                   pad = 5))
 ```
-### we could consider taking a screenshot of it and including as an image
 
 ---
 
@@ -616,6 +613,7 @@ class: hide-logo, inverse, center, middle
 ---
 # Conclusion
 
+
 .font160[
 - plotly is an R package for creating **interactive** and **dynamic** **web-based** graphics
 <br></br>
@@ -631,10 +629,13 @@ class: hide-logo, inverse, center, middle
 # Resources 
 
 
-.font200[To learn more, check out these resources:
+.font200[
 - [Getting Started with plotly in R](https://plotly.com/r/getting-started/)
+<br></br>
 - [Interactive web-based data visualization with R, plotly, and shiny](https://plotly-r.com/)
+<br></br>
 - [Getting Started with plotly in ggplot2](https://plotly.com/ggplot2/getting-started/)
+<br></br>
 - [plotly Cheat Sheet](https://images.plot.ly/plotly-documentation/images/r_cheat_sheet.pdf)
 ]
 ---
