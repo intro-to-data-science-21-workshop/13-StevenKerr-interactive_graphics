@@ -344,13 +344,14 @@ plotly <- plot_ly(mtcars, x = ~wt, y = ~mpg)
 
 # #1 ggplot →️ plotly
 
-.font130[
-- If you use ggplot2, **ggplotly()** converts your static plot to an interactive web-based version! 
+.font150[
+- If you use ggplot2, **ggplotly()** converts your static plot to an interactive web-based version!
+]
+--
 <br></br>
+.font150[
 - This functionality can be really helpful for quickly adding interactivity to your existing ggplot2 workflow
 ]
-
-<br></br>
 
 --
 .center[
@@ -423,17 +424,6 @@ p_gg
 
 ---
 
-# #1 ggplot →️ plotly
-
-<br></br>
-.font160[
-- By default, ggplotly() tries to replicate the static ggplot2 version exactly 
-- Some useful ones include layout() (for customizing the layout), 
-- add_traces() (and its higher-level add_*() siblings, for example add_polygons(), for adding new traces/data), 
-- subplot() (for combining multiple plotly objects)
-]
----
-
 # #2 plotly 
 
 ```{r cars2, eval=TRUE, message=FALSE, warning=FALSE, fig.width=5, fig.height=4, fig.align='center', echo=FALSE}
@@ -460,44 +450,32 @@ fig
 ```
 
 ---
-# #2 plotly 
+# Grammar of Graphics 
+.font170[
+- Key Terms
+  + **Trace**: the data
+  + **Trace Type**: ex. histogram, pie, scatter, etc.
+  + **Attribute**: the style
+  ]
+--
 
-## Grammar of Graphics
-.font160[
-- Trace: the data
-- Trace Type: ex. histogram, pie, scatter, etc.
-- Attribute: the style
-]
+.font170[- Call plotly with **plot_ly** and map variables]
+--
 
-## Pro Tips
-.font160[
-- Call plotly with **plot_ly** and map variables
-- Chain traces with pipes **%>%** 
-- Always pass variables with a tilde **~** 
-- You will oftentimes need to pass parameters in **lists**!
-]
+.font170[- Chain traces with pipes **%>%** ]
+--
+
+.font170[- Always pass variables with a tilde **~** ]
+--
+
+.font170[- You will oftentimes need to pass parameters in **lists**!]
 
 ---
 class: hide-logo, inverse, center, middle
 
 # **What else can plotly do?** 
 
----
 
-# What else can plotly do? 
-
-.center2[![plots and charts and boxes](https://i.imgflip.com/5qzavw.jpg)]
-
-### This info may be redundant at this point in the presentation. Either incorporate earlier or nix.
-### Maybe feature in tutorial? 
-
----
-# What else can plotly do?
-
-.center2[![plotly gallery](https://upload.wikimedia.org/wikipedia/en/0/0a/Gallery_of_Plotly_Graphs.png)
-]
-
-### This info may be redundant at this point in the presentation. Either incorporate earlier or nix
 ---
 
 # Animated Plots
@@ -623,9 +601,11 @@ linked_plot
 </details>
 
 ---
+
 # Filters
 
---- 
+---
+
 # Subplots
 
 ---
@@ -636,49 +616,40 @@ class: hide-logo, inverse, center, middle
 ---
 # Conclusion
 
-.font140[
+.font160[
 - plotly is an R package for creating **interactive** and **dynamic** **web-based** graphics
-<br>
-</br>
+<br></br>
 - plotly graphics can be created by (1) converting ggplot() graphics and (2) initializing directly with plot_ly()
-<br>
-</br>
+<br></br>
 - Key features include the ability to animate graphs, links plots & filters, allow audience to interact with your data
-<br>
-</br>
-- plotly can be complicated. It may get frustrating. 
-<br>
-</br>
-- Setting up the layout requires a lot of code
-<br>
-</br>
+<br></br>
 - plotly might not always be the right tool!
 ]
----
-class: hide-logo, inverse, center, middle
-
-# **Resources**
 
 ---
 
 # Resources 
 
-If you're interested in learning more about plotly, check these out: 
-- 
-- 
-- 
 
+.font200[To learn more, check out these resources:
+- [Getting Started with plotly in R](https://plotly.com/r/getting-started/)
+- [Interactive web-based data visualization with R, plotly, and shiny](https://plotly-r.com/)
+- [Getting Started with plotly in ggplot2](https://plotly.com/ggplot2/getting-started/)
+- [plotly Cheat Sheet](https://images.plot.ly/plotly-documentation/images/r_cheat_sheet.pdf)
+]
 ---
 
 # References 
 
-- 
-- 
-- 
---- 
-background-image: url(https://imgs.xkcd.com/comics/scientific_paper_graph_quality_2x.png)
+### Include references to examples
 
---- 
+.font200[
+- 
+- 
+- 
+]
+
+---
 class: hide-logo, inverse, center, middle
 
 # **Let's practice!**
