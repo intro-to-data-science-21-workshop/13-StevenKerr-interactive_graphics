@@ -441,6 +441,62 @@ class: hide-logo, inverse, center, middle
 
 # **What else can plotly do?** 
 
+---
+
+# Subplots
+
+<details>
+  <summary>
+  Code
+  </summary>
+.details[
+```{r, eval=TRUE, warning=FALSE, message=FALSE, prompt=TRUE}
+library(plotly)
+
+# read in Walmart data
+df <- read.csv("https://raw.githubusercontent.com/plotly/datasets/master/1962_2006_walmart_store_openings.csv")
+
+# first plot - bar chart
+total <- plyr::count(df$YEAR) 
+fit <- fitted(loess(total$freq ~ total$x))
+fig1 <- plot_ly(data = total, x = ~x, y = ~freq, type = "bar", showlegend=FALSE,
+              marker=list(color = ~x, showscale=FALSE)) %>% 
+  add_lines(y = fit, showlegend=FALSE, color = 'black') %>% 
+  layout(showlegend=FALSE, xaxis = list(side = "right", showgrid = FALSE),
+         yaxis = list(showgrid=FALSE), paper_bgcolor = 'rgba(0,0,0,0)', plot_bgcolor = 'rgba(0,0,0,0)')
+
+# second plot - scattergeo map
+g <- list(
+  scope = 'usa',
+  projection = list(type = 'albers usa'),
+  showlakes = FALSE,
+  showocean = TRUE,
+  oceancolor = 'rgba(0,0,0,0)')
+
+fig2 <- plot_geo(df, lat = ~LAT, lon = ~LON) %>% 
+  add_markers(text = ~OPENDATE, showlegend=FALSE, marker=list(color = ~YEAR, showscale=FALSE), hoverinfo = "text") %>% 
+  layout(geo = g, showlegend=FALSE, paper_bgcolor = 'rgba(0,0,0,0)', plot_bgcolor = 'rgba(0,0,0,0)', width = 800)
+
+# subplot
+fig <- subplot(fig1, fig2, nrows = 2) %>% #<<
+  layout(title = "Walmart Store Openings by Year",
+         xaxis = list(domain=list(x=c(0,0.5),y=c(0,0.5))),
+         scene = list(domain=list(x=c(0.5,1),y=c(0,0.5))),
+         xaxis2 = list(domain=list(x=c(0.5,1),y=c(0.5,1))),
+         showlegend=FALSE,showlegend2=FALSE, paper_bgcolor = 'rgba(0,0,0,0)',
+         plot_bgcolor = 'rgba(0,0,0,0)', width = 800)
+```
+]
+</details>
+
+<details>
+  <summary>
+  Plot
+  </summary>
+```{r, eval=TRUE, echo=FALSE}
+fig
+```
+</details>
 
 ---
 
@@ -622,63 +678,6 @@ bscols(widths = c(2,7), #<<
 filter_plot
 ```
 ]
-</details>
-
----
-
-# Subplots
-
-<details>
-  <summary>
-  Code
-  </summary>
-.details[
-```{r, eval=TRUE, warning=FALSE, message=FALSE, prompt=TRUE}
-library(plotly)
-
-# read in Walmart data
-df <- read.csv("https://raw.githubusercontent.com/plotly/datasets/master/1962_2006_walmart_store_openings.csv")
-
-# first plot - bar chart
-total <- plyr::count(df$YEAR) 
-fit <- fitted(loess(total$freq ~ total$x))
-fig1 <- plot_ly(data = total, x = ~x, y = ~freq, type = "bar", showlegend=FALSE,
-              marker=list(color = ~x, showscale=FALSE)) %>% 
-  add_lines(y = fit, showlegend=FALSE, color = 'black') %>% 
-  layout(showlegend=FALSE, xaxis = list(side = "right", showgrid = FALSE),
-         yaxis = list(showgrid=FALSE), paper_bgcolor = 'rgba(0,0,0,0)', plot_bgcolor = 'rgba(0,0,0,0)')
-
-# second plot - scattergeo map
-g <- list(
-  scope = 'usa',
-  projection = list(type = 'albers usa'),
-  showlakes = FALSE,
-  showocean = TRUE,
-  oceancolor = 'rgba(0,0,0,0)')
-
-fig2 <- plot_geo(df, lat = ~LAT, lon = ~LON) %>% 
-  add_markers(text = ~OPENDATE, showlegend=FALSE, marker=list(color = ~YEAR, showscale=FALSE), hoverinfo = "text") %>% 
-  layout(geo = g, showlegend=FALSE, paper_bgcolor = 'rgba(0,0,0,0)', plot_bgcolor = 'rgba(0,0,0,0)', width = 800)
-
-# subplot
-fig <- subplot(fig1, fig2, nrows = 2) %>% #<<
-  layout(title = "Walmart Store Openings by Year",
-         xaxis = list(domain=list(x=c(0,0.5),y=c(0,0.5))),
-         scene = list(domain=list(x=c(0.5,1),y=c(0,0.5))),
-         xaxis2 = list(domain=list(x=c(0.5,1),y=c(0.5,1))),
-         showlegend=FALSE,showlegend2=FALSE, paper_bgcolor = 'rgba(0,0,0,0)',
-         plot_bgcolor = 'rgba(0,0,0,0)', width = 800)
-```
-]
-</details>
-
-<details>
-  <summary>
-  Plot
-  </summary>
-```{r, eval=TRUE, echo=FALSE}
-fig
-```
 </details>
 
 ---
