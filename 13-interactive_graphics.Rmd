@@ -283,7 +283,6 @@ class: hide-logo, inverse, center, middle
 
 # How does plotly work? 
 
-</br>
 .font70[
 Transform a **ggplot2** graphic into a **plotly** graphic with **ggplotly()**
 </br>
@@ -294,10 +293,14 @@ Transform a **ggplot2** graphic into a **plotly** graphic with **ggplotly()**
 .details[
 ```{r, eval=TRUE, message=FALSE, warning=FALSE, echo=TRUE}
 library(ggplot2)
-gg <- mtcars %>% 
-  ggplot(aes(x = wt)) +
-  geom_histogram(bins = 10, binwidth = 0.5)
-p_gg <- ggplotly(gg)
+library(babynames)
+gg <- babynames %>% 
+  filter(name %in% c("Sam", "Alex")) %>% 
+  ggplot() +
+  geom_line(aes(year, prop, color = sex, linetype = name))
+p_gg <- ggplotly(gg, dynamicTicks = TRUE) %>%
+  rangeslider() %>%
+  layout(hovermode = "x")
 ```
 ]
 </details>
@@ -307,7 +310,7 @@ p_gg <- ggplotly(gg)
   ggplot
   </summary>
 .details[
-```{r, fig.width=5, fig.height=4, eval=TRUE, warning=FALSE, message=FALSE, echo=FALSE}
+```{r, fig.width=9, fig.height=5, eval=TRUE, warning=FALSE, message=FALSE, echo=FALSE}
 gg
 ```
 ]
@@ -318,7 +321,7 @@ gg
   ggplotly
   </summary>
 .details[
-```{r, message=FALSE, warning=FALSE, fig.width=5, fig.height=4, fig.align='center', echo=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.width=9, fig.height=5, fig.align='center', echo=FALSE}
 p_gg
 ```
 ]
@@ -331,10 +334,25 @@ Directly initialize a **plotly** graphic with **plot_ly()**
   plot_ly
   </summary>
 .details[
-```{r, message=FALSE, warning=FALSE, fig.width=5, fig.height=4, fig.align='center', echo=FALSE}
-mtcars %>% 
-  plot_ly(x = ~wt) %>% 
-  add_histogram(nbins=10, xbins=list(size=0.5))
+```{r, message=FALSE, warning=FALSE, fig.width=9, fig.height=6, fig.align='center', echo=FALSE}
+babynames %>% 
+  filter(name %in% c("Sam", "Alex")) %>% 
+  plot_ly(x = ~ year, 
+          y = ~prop, 
+          color = ~sex, 
+          linetype = ~name,
+          dynamicTicks = TRUE,
+          hoverinfo = "text",
+          text = ~paste0(
+            "<br>", name, " ", sex,
+            "<br>Probability: ", round(prop, 5),
+            "<br>Year: ", year, "<br>"
+          )) %>% 
+  add_lines() %>% 
+  rangeslider() %>% 
+  layout(hovermode = "x",
+         paper_bgcolor = 'rgba(0,0,0,0)',
+         plot_bgcolor = 'rgba(0,0,0,0)')
 ```
 ]
 </details>
@@ -509,16 +527,17 @@ ani_plot
 </details>
 
 ---
-# Linking plots & Filters
+# Linked Plots
 
 <details>
   <summary>
-  Code Chunk Linked Plots & Filtering Options
+  Code Chunk Linked Plots
   </summary>
 .details[.code70[
 ```{r eval=TRUE, message=FALSE, warning=FALSE, prompt=TRUE}
 library(crosstalk)
 library(openintro) # dataset
+library(plotly)
 
 shared_data <- SharedData$new(cia_factbook, 
                               key = ~country) # This creates a shared dataframe for both plots
@@ -527,36 +546,33 @@ p1 <- shared_data %>% # First Subplot
   plot_ly(x = ~population, # X-axis vector
           y = ~internet_users, # Y-axis vector
           hoverinfo = "text", 
-          text = ~country) %>% # Assigning the Country name to the hover info
+          text = ~paste0("</br> ", country,
+                        "</br> Population: ", round(population/1000, 0), "k",
+                        "</br> Internet Users: ", round(internet_users/1000, 0), "k"
+                        )
+          ) %>% # Editing the hover info
   add_markers() %>% 
-  layout(title = "Internet Users vs. Total Population",
-         xaxis = list(type = "log", title = "Population"), 
+  layout(xaxis = list(type = "log", title = "Population"), 
          yaxis = list(type = "log", title = "Internet Users"), # Plot Labels, Axis scaling
          paper_bgcolor = 'rgba(0,0,0,0)',
-         plot_bgcolor = 'rgba(0,0,0,0)') %>% # Set transparent background
-  highlight(on = "plotly_click", persistent = TRUE) # Specifies what event triggers selection
+         plot_bgcolor = 'rgba(0,0,0,0)') 
 
 p2 <- shared_data %>% # Second Subplot
   plot_ly(x = ~population_growth_rate, 
           y = ~net_migration_rate, 
           hoverinfo = "text", 
-          text = ~country) %>% 
-  add_markers(color = "red") %>% # Only required in bscols linked graphs
-  layout(title = "Population Growth vs Net Migration",
-         xaxis = list(type = "log", title = "Population Growth Rate"), 
+          text = ~paste0("</br> ", country,
+                        "</br> Population Growth: ", population_growth_rate,
+                        "</br> Net Migration: ", net_migration_rate)) %>% 
+  layout(xaxis = list(type = "log", title = "Population Growth Rate"), 
          yaxis = list(type = "log", title = "Net Migration Rate"),
          paper_bgcolor = 'rgba(0,0,0,0)',
-         plot_bgcolor = 'rgba(0,0,0,0)') %>% 
-  highlight(on = "plotly_click", persistent = TRUE) # persistent = TRUE allows multiple selections
+         plot_bgcolor = 'rgba(0,0,0,0)') 
 
-bscols(widths = c(2, 5, 5), # Arrangement of panes in output
-       list(filter_select(id = "countries", label = "Select a Country",
-                  sharedData = shared_data, group = ~country), # Searchable Filter
-            filter_slider(id = "birthslide", label = "Birth rate",
-                 sharedData = shared_data, column = ~birth_rate), # Slider Filters
-            filter_slider(id = "deathslide", label = "Death rate",
-                 sharedData = shared_data, column = ~death_rate)),
-       p1, p2) -> linked_plot # The Two subplots
+subplot(p1, p2, titleX = TRUE, titleY = TRUE) %>% 
+  hide_legend() %>% 
+  layout(title = "Linked Graphs in plotly") %>% 
+  highlight(on = "plotly_selected") -> linked_plot
   
 ```
 ]]
@@ -573,6 +589,78 @@ linked_plot
 ```
 ]
 </details>
+
+---
+# Adding Filters & Controls
+
+<details>
+  <summary>
+  Code Chunk Filter and Control Options
+  </summary>
+.details[.code70[
+```{r eval=TRUE, message=FALSE, warning=FALSE, prompt=TRUE}
+library(crosstalk)
+
+diamonds %>% 
+  SharedData$new() -> shared_data # create shared data frame object
+shared_data %>% 
+  plot_ly(x = ~carat, # Mapping Variables
+          y = ~price,
+          color = ~clarity) %>% 
+  layout(
+    xaxis = list(title = "Carat"),
+    yaxis = list(title = "Price"),
+    paper_bgcolor = 'rgba(0,0,0,0)',
+    plot_bgcolor = 'rgba(0,0,0,0)',
+    updatemenus = list( # Creating plotly native buttons for changing plot type
+        list(y = 0.35, x = 1, label = "Plot Type", 
+             buttons = list(
+               list(method = "restyle",
+                    args = list("type", "scatter"), # Scatter as first option
+                    label = "Scatter Plot"),
+               list(method = "restyle",
+                    args = list("type", "histogram2d"), # 2D Histogram as second option
+                    label = "2D Histogram"))
+             )
+        )
+    ) -> filter_plot
+
+bscols(widths = c(2,7), # bscols call, creating custom "shiny" controls
+       list(filter_checkbox(id = "quality_checks", # Checkboxes for cut quality
+                            label = "Cut Quality",
+                            sharedData = shared_data,
+                            group = ~cut),
+            filter_select(id = "clarity_search", # Select-Search bar for Clarity level
+                          label = "Select Clarity Level",
+                          sharedData = shared_data,
+                          group = ~clarity),
+            filter_slider(id = "depth_slider", # Slider option for depth variable
+                          label = "Depth",
+                          sharedData = shared_data, 
+                          column = ~depth)), # Pay attention! The slider filters a column!
+       filter_plot) -> filter_plot
+```
+]]
+</details>
+
+
+
+
+
+<details>
+  <summary>
+  Filtered Plot
+  </summary>
+.details[
+```{r eval=TRUE, warning=FALSE, message=FALSE, echo=FALSE}
+filter_plot
+  
+```
+]
+</details>
+
+
+
 ---
 class: hide-logo, inverse, center, middle
 
