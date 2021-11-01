@@ -11,7 +11,7 @@ This session will teach you how to build interactive graphics with R and plotly.
 
 ### Main learning objectives
 
-The goals of this session are to (1) equip you with conceptual knowledge about the plotly package and data visualization workflow, (2) ..., and (3) provide you with practice material as well as some further readings.
+The goals of this session are to (1) equip you with conceptual knowledge about the plotly package and data visualization workflow, (2) demonstrate key features of the package and (3) provide you with practice material as well as some further readings.
 
 
 ## Instructors
@@ -22,6 +22,7 @@ The goals of this session are to (1) equip you with conceptual knowledge about t
 
 ## Further resources
 
+- [plotly Cheat Sheet](https://images.plot.ly/plotly-documentation/images/r_cheat_sheet.pdf)
 - [plotly overview at plotly-r.com](https://plotly-r.com)
 - [Getting started with plotly at plotly.com](https://plotly.com/r/getting-started/)
 - [Augmenting ggplot2 with plotly at plotly.com](https://plotly.com/ggplot2/getting-started/) 
@@ -33,6 +34,6 @@ The material in this repository is made available under the [MIT license](http:/
 
 ## Statement of contributions
 
-**Julian Kath** 
+**Julian Kath** prepared the presentation slides, recording, and examples for the practice material.
 
-**Steve Kerr** 
+**Steve Kerr** prepared the presentation slides, recording, and practice materials.
