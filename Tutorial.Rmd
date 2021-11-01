@@ -48,6 +48,8 @@ library(plotly)
 
 # ggplot vs. plotly 
 
+The grammar of plot_ly is similar to that of ggplot2. By specifying text section, you can customize the mouse over hover text. If text is not specified, the default hover text is just the x and y coordinates of that data point. In addtion, you can group the data points by color and size just as in ggplot2. To add a layer in the graph, such as fitting a linear regression line, we use add_trace.
+
 ```{r ggplot vs. plotly table, echo=FALSE, message=FALSE, warning=FALSE}
 library(plotly)
 
@@ -58,9 +60,8 @@ fig <- plot_ly(
   header = list(
     values = c("ggplot","plotly"),
     align = c("center", "center"),
-    line = list(width = 1, color = '#434b73
-'),
-    fill = list(color = c("grey", "grey")),
+    line = list(width = 1, color = 'black'),
+    fill = list(color = c("#434b73", "#434b73")),
     font = list(family = "Arial", size = 14, color = "white")
   ),
   cells = list(
