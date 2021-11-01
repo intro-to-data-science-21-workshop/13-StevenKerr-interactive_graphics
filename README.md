@@ -17,7 +17,7 @@ The goals of this session are to (1) equip you with conceptual knowledge about t
 ## Instructors
 
 - Julian Kath
-- Steve Kerr ([GitHub](https://github.com/smkerr)
+- Steve Kerr ([GitHub](https://github.com/smkerr))
 
 
 ## Further resources
