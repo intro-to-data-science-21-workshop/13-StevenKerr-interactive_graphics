@@ -23,21 +23,21 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 ***
 
-Welcome to *plotly*! *plotly* is an R package for creating **interactive** and **dynamic** **web-based** graphics.  
+Welcome to **plotly**! plotly is an R package for creating **interactive** and **dynamic** **web-based** graphics.  
 
 What we will cover:
 
 * installing plotly
 * ggplot vs. plotly syntax 
-* creating basic graphics
-* advanced features
+* using ggplotly
+* plotly examples
 * Q&A
 
-# Install plotly `r emo::ji("woman_technologist")`
+# Install  `r emo::ji("man_technologist")`
 
-```{r install, message=FALSE, warning=FALSE, eval=FALSE, echo=FALSE}
+```{r install, eval=TRUE, message=FALSE, warning=FALSE, results='hide'}
 # Download from CRAN
-install.packages('plotly')
+install.packages('plotly', repos = 'http://cran.us.r-project.org')
 
 # Download from GitHub
 devtools::install_github("ropensci/plotly")
@@ -46,370 +46,264 @@ devtools::install_github("ropensci/plotly")
 library(plotly)
 ```
 
-# ggplot vs. plotly 
+# ggplot2 vs. plotly
 
-The grammar of plot_ly is similar to that of ggplot2. By specifying text section, you can customize the mouse over hover text. If text is not specified, the default hover text is just the x and y coordinates of that data point. In addtion, you can group the data points by color and size just as in ggplot2. To add a layer in the graph, such as fitting a linear regression line, we use add_trace.
+Last week we learned about ggplot2's grammar of graphics. Here we'll examine how plotly's syntax differs from that of ggplot2. 
 
-```{r ggplot vs. plotly table, echo=FALSE, message=FALSE, warning=FALSE}
+## ggplot2
+
+Let's quickly recap ggplot2's grammar of graphics. In most cases you start with ggplot( ), supply a data set and aesthetic mapping (with aes( )). You then add on layers (e.g., geom_point( ) or geom_histogram( )), scales (e.g., scale_colour_brewer( )), faceting specifications (e.g., facet_wrap( )) and coordinate systems (e.g., coord_flip( )).
+[(more info)](https://ggplot2.tidyverse.org/)
+
+
+Here's the template for building plots with ggplot2:
+```
+ggplot(data = <DATA>) + 
+  <GEOM_FUNCTION>(
+     mapping = aes(<MAPPINGS>),
+     stat = <STAT>, 
+     position = <POSITION>
+  ) +
+  <COORDINATE_FUNCTION> +
+  <FACET_FUNCTION>
+```
+
+
+Here's an example of ggplot2 in action:
+```{r ggplot2, fig.align='center'}
+library(ggplot2)
+
+ggplot(iris) + # Add data
+  geom_point(
+    mapping = aes(x = Petal.Length, y = Sepal.Length, color = Species)) + # Add mappings
+  labs(title = "Petal vs. Sepal Lengths", # Add title & labels
+       x = "Petal Length", 
+       y = "Sepal Length",
+       color = "Species") + # Add legend title
+  theme_minimal() # Add theme
+```
+
+## plotly 
+
+The grammar of plotly is similar to that of ggplot2. Like ggplot2, you start with a base and add layers. 
+
+### Trace 
+
+In plotly, the base is referred to as a "trace." A trace defines a mapping from data and visuals. Every trace has a type (e.g., histogram, pie, scatter, etc) and the trace type determines what other attributes (i.e., visual and/or interactive properties, like x, hoverinfo, name) are available to control the trace mapping.
+
+To add a layer in the graph, such as fitting a linear regression line, we use **add_trace()**. There is also a family of **add_*( )** functions (e.g., add_histogram( ), add_lines( ), etc) that define how to render data into geometric objects. [(more info)](https://jtr13.github.io/spring19/community_contribution_group17.html)
+
+List of **add_*( )** functions:
+
+* add_histograms( )
+* add_bars( )
+* add_boxplot( )
+* add_contour( )
+* add_lines( )
+* add_heatmap( )
+* add_scattergeo( )
+* add_pie( )
+* and many more...
+
+### Layout
+
+The layout( ) function adds and modifies parts of the plotly graphic. This includes modifying the plot title, legend, margins, size, font, background color, colorscale, and hoverlabels among other features.  
+
+Here's how you would create the plot from above using plotly:  
+```{r plotly, fig.align='center'}
 library(plotly)
 
-fig <- plot_ly(
-  type = 'table',
-  columnwidth = c(100, 100),
-  columnorder = c(0, 1),
-  header = list(
-    values = c("ggplot","plotly"),
-    align = c("center", "center"),
-    line = list(width = 1, color = 'black'),
-    fill = list(color = c("#434b73", "#434b73")),
-    font = list(family = "Arial", size = 14, color = "white")
-  ),
-  cells = list(
-    values = rbind(c("info on ggplot"), c("info on plotly")),
-    align = c("center", "center"),
-    line = list(color = "black", width = 1),
-    font = list(family = "Arial", size = 12, color = c("black"))
-  ))
-
-fig
+iris %>% # Add data
+  # NOTE: plotly works with pipe operators (%>%)
+  plot_ly(x = ~Petal.Length, y = ~Sepal.Length, split = ~Species, # Add mappings
+  # NOTE: You will need to use ~ to map a variable of the data set to an aesthetic parameter
+        type = 'scatter') %>% # Specify trace type 
+  layout(title = 'Petal vs. Sepal Length', # Add title & labels
+         xaxis = list(title = 'Petal Length'),
+         yaxis = list(title = 'Sepal Length'),          
+         legend = list(title = list(text = 'Species')), # Add legend title
+         plot_bgcolor = 'white') # Modify background color 
 ```
 
-Key Terms
-Traces
-Attributes
-In plotly.js terminology, a figure has two key components: data (aka, traces) and a layout. A trace defines a mapping from data and visuals.4 Every trace has a type (e.g., histogram, pie, scatter, etc) and the trace type determines what other attributes (i.e., visual and/or interactive properties, like x, hoverinfo, name) are available to control the trace mapping.
-
-Like ggplot2, you start with a base and add layers
-a figure has two key components: data (aka, traces) and a layout. A trace defines a mapping from data and visuals.4 Every trace has a type (e.g., histogram, pie, scatter, etc) and the trace type determines what other attributes (i.e., visual and/or interactive properties, like x, hoverinfo, name) are available to control the trace mapping.
-A layer can be thought of as a group of graphical elements that can be sufficiently described using only 5 components: data, aesthetic mappings (e.g., assigning clarity to color), a geometric representation (e.g. rectangles, circles, etc), statistical transformations (e.g., sum, mean, etc), and positional adjustments (e.g., dodge, stack, etc).
-There are also a family of add_*() functions (e.g., add_histogram(), add_lines(), etc) that define how to render data into geometric objects.
-There are numerous other add_*() functions that calculate statistics in the browser (e.g., add_histogram2d(), add_contour(), add_boxplot(), etc)
-use ~ to map a variable (i.e. column) of the dataset to an aesthetic parameter.
-In addition to layout() for adding/modifying part(s) of the graph’s layout
-The style() function provides a way to modify trace attribute values in a plotly object. Furthermore, you can use the plotly_build() function.
-Works well with the dplyr package!
+Notice that even while the plots look quite similar, the syntax we use to create them can be quite different.
 
 
-There is no right or wrong answer to exactly when you should use each type of graphic, however, there are a few rules of thumb: 
+To underscore this point, the table below shows the differences in ggplot2 and plotly grammar: 
 
-* static grapchis are quick and easy to produce. 
+| Element 	| ggplot2 	| plotly 	|
+|---    |---	|---	|
+| Data & Aesthetics	| `ggplot(data = mpg, aes(x = displ, y = hwy, color = drv))` 	| `plot_ly(data = mpg, x = ~displ, y = ~hwy, color = ~drv)` |
+| Geometries 	| `+ geom_point()` 	| `%>% add_markers()` |
+| Facets 	| `+ facet_grid(vars(drv), ncol = 1)` 	| `%>% subplot(fig1, fig2)` or use `ggplotly()` |
+| Labels 	| `+ labs(x = "Height", y = "Weight", title = "Look at my plot")`	| ` %>% layout(title = 'Look at my plot', xaxis = list(title = 'Height'), yaxis = list(title = 'Weight')` |
 
-Webscraping broadly includes a) getting (unstructured) data from the web and b) 
-bringing it into shape (e.g. cleaning it, getting it into tabular format).
+### schema( )
 
-Why webscrape? While some influential people consider "Data Scientist" `r emo::ji("woman_technologist")` as the [sexiest job](https://hbr.org/2012/10/data-scientist-the-sexiest-job-of-the-21st-century) of the 21st century (congratulations!), one of the sexiest just emerging academic disciplines (my influential view) - Computational Social Science (CSS). Why so? 
+It's not easy learning an entirely new grammar of graphics. Thankfully the schema( ) function is a helpful resource! The schema contains valid attributes names, their value type, default values (if any), and min/max values (if applicable). [(more info)](https://www.rdocumentation.org/packages/plotly/versions/4.10.0/topics/schema)
 
-* data abundance online 
-* social interaction online
-* services track social behavior
-
-BUT online data are usually meant for display, not (clean) download!
-
-But getting access to online data would also be incredibly interesting when you think of 
-very pragmatic things like financial resources, time resources, reproducibility and updateability...
-
-Luckily, with `R` we can automate the whole pipeline of downloading, parsing and post-processing to make our projects easily reproducible. 
-
-In general, remember, the basic **workflow for scraping static webpages** is the following.
-
-```{r, fig.align='center', echo=F, out.width = "90%"}
-knitr::include_graphics("pics/workflow.png")
+```{r schema}
+# Try it! 
+schema()
 ```
 
-# Scraping static websites with `rvest` `r emo::ji("tractor")`
+# ggplotly 
 
-Who doesn't love Wikipedia? Let's use this as our first, straight forward test case.
+The ggplotly( ) function has the ability to translate ggplot2 to plotly. This functionality can be really helpful for quickly adding interactivity to your existing ggplot2 workflow. Moreover, even if you know plotly well, you can still leverage ggplot2’s consistent and expressive interface for exploring statistical summaries across groups. [(more info)](https://plotly-r.com/overview.html#intro-ggplotly)
 
-**Step 1.** Load the packages `rvest` and `stringr`.
+To use ggplotly function, plot a regular ggplot2 graphic and then apply the ggplotly( ) function. 
+```{r ggplotly, message=FALSE, warning=FALSE, fig.align='center'}}
+library(ggplot2)
+library(plotly)
 
-```{r, message=F}
-library(rvest)
-library(stringr)
+g <- ggplot(iris) + # Add data
+  geom_point(
+    mapping = aes(x = Petal.Length, y = Sepal.Length, color = Species), # Add mappings
+    position = position_jitter()) + # Modify position
+  labs(title = "Petal vs. Sepal Lengths",
+       x = "Petal Length", # Add title & labels
+       y = "Sepal Length",
+       color = "Species") + # Add legend title
+  theme_minimal() + # Add theme
+  theme(legend.position = "right") # Adjust legend position
+  
+ggplotly(g)
 ```
 
-**Step 2.** Parse the page source.
+# Key Features
 
 ```{r}
-parsed_url <- read_html("https://en.wikipedia.org/wiki/Cologne")
-```
+# the `plot_ly()` function initiates an object, and if no trace type
+# is specified, it sets a sensible default
+p <- plot_ly(economics, x = ~date, y = ~uempmed)
+p
+# some `add_*()` functions are a specific case of a trace type
+# for example, `add_markers()` is a scatter trace with mode of markers
+add_markers(p)
+# scatter trace with mode of text
+add_text(p, text = "%")
+# scatter trace with mode of lines
+add_paths(p)
+# like `add_paths()`, but ensures points are connected according to `x`
+add_lines(p)
+# if you prefer to work with plotly.js more directly, can always
+# use `add_trace()` and specify the type yourself
+add_trace(p, type = "scatter", mode = "markers+lines")
+# mappings provided to `plot_ly()` are "global", but can be overwritten
+plot_ly(economics, x = ~date, y = ~uempmed, color = I("red"), showlegend = FALSE) %>%
+add_lines() %>%
+add_markers(color = ~pop)
 
-**Step 3.** Extract information.
-
-```{r}
-parsed_nodes <- html_nodes(parsed_url, 
-                           xpath = '//p[(((count(preceding-sibling::*) + 1) = 157) and parent::*)]')
-carnival <- html_text(parsed_nodes)
-carnival
-```
-
-How can do I know THIS `xpath = '//p[(((count(preceding-sibling::*) + 1) = 157) and parent::*)]'` ?
-
-There are two options: 
-
-**Option 1.** On your page of interest, go to a table that you'd like to scrape. Our favorite bowser for webscraping is Google Chrome but others work as well. On Chrome, you go in View > Developer > inspect elements. If you hover over the html code on the right, you should see boxes of different colors framing different elements of the page. Once the part of the page you would like to scrape is selected, right click on the html code and Copy > Copy Xpath. That's it. 
-
-```{r, fig.align='center', echo=F, out.width = "90%"}
-knitr::include_graphics("pics/inspect.png")
-```
-
-**Option 2.** You download the [Chrome Extension](https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb?hl=de) `SelectorGadget` and activate it while browsing the page you'd like to scrape from. You will see a selection box moving with your cursor. You select an element by clickin on it. It turns green - and so does all other content that would be selected with the current XPath.
-
-```{r, fig.align='center', echo=F, out.width = "90%"}
-knitr::include_graphics("pics/selector.png")
-
-```
-
-You can now de-select everything that is irrelevant to you by clicking it again (it then turns red). Final step, then just click the XPath button at the bottom of the browser window. Make sure to use single quotation marks with this XPath!
-
-```{r, fig.align='center', echo=F, out.width = "90%"}
-
-knitr::include_graphics("pics/selector2.png")
-```
-
-
-
-Let's repeat step 2 and 3 with a more data-sciency example. `r emo::ji("man_dancing")`
-
-**Step 2.** Parse the page source.
-```{r}
-hot100page <- "https://www.billboard.com/charts/hot-100"
-hot100 <- read_html(hot100page)
-```
-
-**Step 3.** Extract information. When going through different levels of html, you can also use tidyverse logic.
-```
-body_nodes <- hot100 %>% 
- html_node("body") %>% 
- html_children()
-
-body_nodes %>% 
- html_children()
-```
-play with that yourself if you like...
-
-Now let's get more specific - `xml_find_all()` takes xpath syntax!
-```{r}
-rank <- hot100 %>% 
-  rvest::html_nodes('body') %>% 
-  xml2::xml_find_all("//span[contains(@class, 'chart-element__rank__number')]") %>% 
-  rvest::html_text()
-
-artist <- hot100 %>% 
-  rvest::html_nodes('body') %>% 
-  xml2::xml_find_all("//span[contains(@class, 'chart-element__information__artist')]") %>% 
-  rvest::html_text()
-
-title <- hot100 %>% 
-  rvest::html_nodes('body') %>% 
-  xml2::xml_find_all("//span[contains(@class, 'chart-element__information__song')]") %>% 
-  rvest::html_text()
-
-```
-**Step 4.** Usually, step 4 is to clean extracted data. In this case, it actually is very clean already. However, if you need help with data cleaning using regular expressions (me, always.), visit the section of [R for Data Science](https://r4ds.had.co.nz/strings.html) or simply this [cheat sheet](https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf).
-
-**Step 5.** Put everything into a data frame. `r emo::ji("musical_note")`
-```{r}
-chart_df <- data.frame(rank, artist, title)
-
-knitr::kable(chart_df  %>% head(10))
-```
-
-## Scraping HTML tables `r emo::ji("rocket")`
-
-We have just been scraping an html table... but there is even an easier way to do this in `rvest`!
-
-```{r}
-url_p <- read_html("https://en.wikipedia.org/wiki/List_of_human_spaceflights")
-tables <- html_table(url_p, header = TRUE, fill = TRUE)
-spaceflights <- tables[[1]]
-
-knitr::kable(spaceflights[,1:7]  %>% head(10))
-```
-Another R workaround for more complex tables is the package `htmltab` that offers some more flexibility.
-
-## It's your turn! `r emo::ji("hammer_and_wrench")`
-
-Think about web data hosted on a **static webpage** that you might be interested in scraping!
-Comparably easy to scrape webpages are Wikipedia pages or pages that contain data in table format (as we've seen already). 
-
-Before you start - it might be worth a thought to get Chrome + Selector Gadget. This will make your future as web scraper a bit easier. 
-
-**Option A**
-
-1. Inspect the page and try to find the elements you are interested in in the html code.
-
-2. Parse the url.
-
-3. Extract the XPath for the element you would like to scrape and parse the nodes.
-
-4. Inspect the html output you get. What would be the next steps now? Can you already put your output into a dataframe? 
-
-**Option B**
-
-1. Find an html table that you'd like to scrape.
-
-2. Scrape it.
-
-
-# Scraping multiple pages `r emo::ji("robot")`
-
-Whenever you want to really understand what's going on within the functions of a new R package, it is very likely that there is a relevant article published in the [Journal of Statistical Software](https://www.jstatsoft.org/index). Let's say you are interested in how the journal was doing over the past years.
-
-**Step 1.** Inspect the source. Basically, follow steps to extract the Xpath information.
-```{r, eval=F}
-browseURL("http://www.jstatsoft.org/issue/archive")
-```
-
-**Step 2** Develop a scraping strategy. We need a set of URLs leading to all sources. Inspect the URLs of different sources and find the pattern. Then, construct the list of URLs from scratch.
-```{r}
-baseurl <- "http://www.jstatsoft.org/article/view/v"
-volurl <- paste0("0", seq(1, 99, 1))
-volurl[1:9] <- paste0("00", seq(1, 9, 1))
-brurl <- paste0("0", seq(1, 9, 1))
-urls_list <- paste0(baseurl, volurl)
-urls_list <- paste0(rep(urls_list, each = 9), "i", brurl)
-urls_list[1:5]
-```
-
-**Step 3** Think about where you want your scraped material to be stored and create a directory.
-```{r, eval=F}
-tempwd <- ("data/jstatsoftStats")
-dir.create(tempwd)
-setwd(tempwd)
-```
-
-**Step 4** Download the pages. Note that we did not do this step last time, when we were only scraping one page.
-```{r, eval=F}
-folder <- "html_articles/"
-dir.create(folder)
-
-for (i in 1:length(urls_list)) {
-  # only update, don't replace
-    if (!file.exists(paste0(folder, names[i]))) {  
-  # skip article when we run into an error   
-      tryCatch( 
-        download.file(urls_list[i], destfile = paste0(folder, names[i])),
-        error = function(e) e
-      )
-  # don't kill their server --> be polite!  
-      Sys.sleep(runif(1, 0, 1)) 
-        
-} }
-```
-
-While R is downloading the pages for you, you can watch it directly in the directory you defined...
-
-```{r, fig.align='center', echo=F, out.width = "70%"}
-knitr::include_graphics("pics/html_files.png")
-```
-
-Check whether it worked.
-```{r, eval=F}
-list_files <- list.files(folder, pattern = "0.*")
-list_files_path <- list.files(folder, pattern = "0.*", full.names = TRUE)
-length(list_files)
-```
-Yay! Apparently, we scraped the html pages of 802 articles. 
-
-## (Git)ignoring files `r emo::ji("no_good_woman")`
-In case you scraping project is is linked to GitHub (as it will be in your assignment!), it can be useful to **.gitignore** the folder of downloaded files. This means that the folder can be stored in your local directory of the project but will not be synced with the remote (main) repository. Here is information on how to do this using [RStudio](https://carpentries-incubator.github.io/git-Rstudio-course/02-ignore/index.html). In Github Desktop it is very simple, you do your scraping work, the folder is created in your local repository and before your commit and push these changes, you go on `Repository` > `Repository Settings` > `Ignored Files` and edit the .gitignore file (add the name of the new folder / files you don't want to sync). More generally, it makes sense to exclude .Rproj files, .RData files (and other binary or large data files), draft folders and sensitive information from version control. Remember, git is built to track changes in code, not in large data files.
-
-
-**Step 5** Import files and parse out information. A loop is helpful here!
-```{r, eval=F}
-# define output first
-authors <- character()
-title <- character()
-datePublish <- character()
-
-# then run the loop
-for (i in 1:length(list_files_path)) {
-  html_out <- read_html(list_files_path[i])
-    
-  authors[i] <- html_text(html_nodes(html_out , xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "authors_long", " " ))]//strong'))
-    
-  title[i] <- html_text(html_nodes(html_out , xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "page-header", " " ))]'))
-    
-  datePublish[i] <- html_text(html_nodes(html_out , xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "article-meta", " " ))]//*[contains(concat( " ", @class, " " ), concat( " ", "row", " " )) and (((count(preceding-sibling::*) + 1) = 2) and parent::*)]//*[contains(concat( " ", @class, " " ), concat( " ", "col-sm-8", " " ))]'))
+# a number of `add_*()` functions are special cases of the scatter trace
+plot_ly(economics, x = ~date) %>%
+add_ribbons(ymin = ~pce - 1e3, ymax = ~pce + 1e3)
+# use `group_by()` (or `group2NA()`) to apply visual mapping
+# once per group (e.g. one line per group)
+txhousing %>%
+group_by(city) %>%
+plot_ly(x = ~date, y = ~median) %>%
+add_lines(color = I("black"))
+## Not run:
+# use `add_sf()` or `add_polygons()` to create geo-spatial maps
+# http://blog.cpsievert.me/2018/03/30/visualizing-geo-spatial-data-with-sf-and-plotly/
+if (requireNamespace("sf", quietly = TRUE)) {
+nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+plot_ly() %>% add_sf(data = nc)
 }
+# univariate summary statistics
+plot_ly(mtcars, x = ~factor(vs), y = ~mpg) %>%
+add_boxplot()
+plot_ly(mtcars, x = ~factor(vs), y = ~mpg) %>%
+add_trace(type = "violin")
+# `add_histogram()` does binning for you...
+mtcars %>%
+plot_ly(x = ~factor(vs)) %>%
+add_histogram()
+# ...but you can 'pre-compute' bar heights in R
+mtcars %>%
+dplyr::count(vs) %>%
+plot_ly(x = ~vs, y = ~n) %>%
+add_bars()
+# the 2d analogy of add_histogram() is add_histogram2d()/add_histogram2dcontour()
+library(MASS)
+(p <- plot_ly(geyser, x = ~waiting, y = ~duration))
+add_histogram2d(p)
+add_histogram2dcontour(p)
+# the 2d analogy of add_bars() is add_heatmap()/add_contour()
+# (i.e., bin counts must be pre-specified)
+den <- kde2d(geyser$waiting, geyser$duration)
+p <- plot_ly(x = den$x, y = den$y, z = den$z)
+add_heatmap(p)
+add_contour(p)
+# `add_table()` makes it easy to map a data frame to the table trace type
+plot_ly(economics) %>%
+add_table()
 
-# inspect data
-authors[1:3]
-title[1:2]
-datePublish[1:3]
-
-# create a data frame
-dat <- data.frame(authors = authors, title = title, datePublish = datePublish)
-dim(dat)
-```
-**Step 6** Clean data...
-
-You see, scraping data from multiple pages is no problem in R. Most of the brain work often goes into developing a scraping strategy and tidying the data, not into the actual downloading/scraping part.
-
-Scraping is also possible in much more complex scenarios! Watch out for workshop presentations on 
-
-* Dynamic webscraping with RSelenium
-* Web APIs
-* Regular expressions with stringr
-* Data cleaning with janitor
-
-and many more `r emo::ji("star_struck")`
-
-
-# Good scraping practice
-
-There is a set of general rules to the game: 
-
-1. You take all the responsibility for your web scraping work.
-2. Think about the nature of the data. Does it entail sensitive information? Do not collect personal data without explicit permission.
-3. Take all copyrights of a country’s jurisdiction into account. If you publish data, do not commit copyright fraud.
-4. If possible, stay identifiable. Stay polite. Stay friendly. Obey the scraping etiquette.
-5. If in doubt, ask the author/creator/provider of data for permission—if your interest is entirely scientific, chances aren’t bad that you get data.
-
-## How do I know the scraping etiquette of a site? `r emo::ji("handshake")`
-
-Robot exclusion standards (`robot.txt`) are informal protocols to prohibit web robots from crawling content. They list documents that are allowed to crawl and which not. It is not a technical barrier but an ask for compliance.
-They are located in the root directory of a website (e.g `https://de.wikipedia.org/robots.txt`). 
-
-For example, let's have a look at wikipedia's [robot.txt](https://de.wikipedia.org/robots.txt) file, which is very human readable.
-
-General rules are listed under `User-agent: *` which is most interesting for R-based crawlers. A universal ban for a directory looks like this `Disallows: /`, sometimes Crawl-delays are suggested (in seconds) `Crawl-delay: 2`.
-
-## What is "polite" scraping? `r emo::ji("snail")`
-
-First thing would be not to scrape at a speed that causes trouble for their server. Therefore, whenever you loop over a list of URLs, add a `Sys.sleep(runif(1, 1, 2))` at the end of the loop. 
-
-And generally, it is better practice to store data on your local drive first (`download.file()`), then parse (`read_html()`). 
-
-**A footnote on sustainability.** In the digital context, we often forget that or actions do have physical consequences. For example, training AI, using blockchain and just streaming videos do cause considerable amounts of CO2 emissions. So does bombarding a server with requests - certainly to a much lesser extent than the examples before - but please consider whether you have to re-run a large scraping project 100 times in order to debug things. 
-
-Furthermore, downloading massive amounts of data may arouse attention from server administrators.
-Assuming that you've got nothing to hide, you should stay identifiable beyond your IP address.
-
-## How can I stay identifyable? `r emo::ji("bust_in_silhouette")`
-
-Option 1: Get in touch with website administrators / data owners.
-
-Option 2: Use HTTP header fields From and User-Agent to provide information about yourself.
-
-```
-url <- "http://a-totally-random-website.com"
-
-rvest_session <- session(url, 
-  add_headers(`From` = "my@email.com", 
-              `UserAgent` = R.Version()$version.string))
-                
-scraped_text <- rvest_session %>% 
-            html_elements(xpath = "p//a") %>% 
-            html_text()
-
+# pie charts!
+ds <- data.frame(labels = c("A", "B", "C"), values = c(10, 40, 60))
+plot_ly(ds, labels = ~labels, values = ~values) %>%
+add_pie() %>%
+layout(title = "Basic Pie Chart using Plotly")
+data(wind)
+plot_ly(wind, r = ~r, t = ~t) %>%
+add_area(color = ~nms) %>%
+layout(radialaxis = list(ticksuffix = "%"), orientation = 270)
+# ------------------------------------------------------------
+# 3D chart types
+# ------------------------------------------------------------
+plot_ly(z = ~volcano) %>%
+add_surface()
+plot_ly(x = c(0, 0, 1), y = c(0, 1, 0), z = c(0, 0, 0)) %>%
+add_mesh()
 ```
 
-rvest's `session()` creates a session object that responds to HTTP and HTML methods.
-Here, we provide our email address and the current R version as User-Agent information.
-This will pop up in the server logs: The webpage administrator has the chance to easily get in touch with you.
 
+```{r}
+diamonds %>%
+  plot_ly() %>% 
+  add_histogram(x = ~cut)
+```
+
+The type of plot is specified by setting the trace type. The scatter trace type is the foundation for many low-level geometries (e.g., points, lines, and text), thus we must also specify a mode. To create a scatter plot with points the mode is set to markers, but additional scatter modes include lines, paths, segments, ribbons, polygons, and text.
+(https://blog.methodsconsultants.com/posts/introduction-to-interactive-graphics-in-r-with-plotly/)
+
+```{r}
+mpg %>%
+  plot_ly(x = ~displ, y = ~hwy, color = ~class)
+```
+
+```{r}
+mpg %>%
+  plot_ly(x = ~displ, y = ~hwy, color = ~class) %>%
+  add_trace(type = "scatter", mode = "markers")
+```
+
+Rather than using add_trace() and specifying the type and mode, we can use the convenience function add_markers(). (https://blog.methodsconsultants.com/posts/introduction-to-interactive-graphics-in-r-with-plotly/)
+
+```{r}
+mpg %>%
+  plot_ly(x = ~displ, y = ~hwy, color = ~class) %>%
+  add_markers()
+```
+
+
+
+
+
+# Q&A 
+
+```{r, fig.align='center', echo=FALSE, out.width = "90%"}
+knitr::include_graphics("pics/questions.png")
+```
 
 # Sources
 
-This tutorial drew heavily on Simon Munzert's book [Automated Data Collection with R](http://r-datacollection.com/) and related [course materials](https://github.com/simonmunzert/web-scraping-with-r-extended-edition). We also used an [example](https://towardsdatascience.com/tidy-web-scraping-in-r-tutorial-and-resources-ac9f72b4fe47) from Keith McNulty's blog post on tidy web scraping in R.
+This tutorial drew from the following sources:
+* [A Comparison of plot_ly and ggplotly for Interactive Graphs in R](https://jtr13.github.io/spring19/community_contribution_group17.html)
+* (https://ggplot2.tidyverse.org/)
+* (https://r4ds.had.co.nz/data-visualisation.html)
+* (https://plotly-r.com/overview.html)
+* (https://cran.r-project.org/web/packages/plotly/plotly.pdf)
+
+We also used an [example](https://towardsdatascience.com/tidy-web-scraping-in-r-tutorial-and-resources-ac9f72b4fe47) from Keith McNulty's blog post on tidy web scraping in R.
+
+[example](https://jtr13.github.io/spring19/community_contribution_group17.html)
