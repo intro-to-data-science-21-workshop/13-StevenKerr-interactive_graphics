@@ -359,3 +359,21 @@ This will pop up in the server logs: The webpage administrator has the chance to
 # Sources
 
 This tutorial drew heavily on Simon Munzert's book [Automated Data Collection with R](http://r-datacollection.com/) and related [course materials](https://github.com/simonmunzert/web-scraping-with-r-extended-edition). We also used an [example](https://towardsdatascience.com/tidy-web-scraping-in-r-tutorial-and-resources-ac9f72b4fe47) from Keith McNulty's blog post on tidy web scraping in R.
+
+
+# #1 ggplot →️ plotly
+
+.font150[
+- If you use ggplot2, **ggplotly()** converts your static plot to an interactive web-based version!
+]
+
+
+.font150[
+- This functionality can be really helpful for **quickly adding interactivity to your existing ggplot2 workflow**
+]
+
+
+.center[
+![Level Up](https://media3.giphy.com/media/qfridHRcLlMLMtWueu/giphy.gif?cid=ecf05e47p7c96cu7pi9td856dcfckt7rsk2mcwfaf1g58qrj&rid=giphy.gif&ct=g)
+]
+

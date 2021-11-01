@@ -311,24 +311,6 @@ class: hide-logo, inverse, center, middle
 
 # #1 ggplot →️ plotly
 
-.font150[
-- If you use ggplot2, **ggplotly()** converts your static plot to an interactive web-based version!
-]
---
-
-.font150[
-- This functionality can be really helpful for **quickly adding interactivity to your existing ggplot2 workflow**
-]
-
---
-.center[
-![Level Up](https://media3.giphy.com/media/qfridHRcLlMLMtWueu/giphy.gif?cid=ecf05e47p7c96cu7pi9td856dcfckt7rsk2mcwfaf1g58qrj&rid=giphy.gif&ct=g)
-]
-
----
-
-# #1 ggplot →️ plotly
-
 <details>
   <summary>
   Code
@@ -383,7 +365,7 @@ class: hide-logo, inverse, center, middle
 ```{r, message=FALSE, warning=FALSE, fig.width=9, fig.height=6, fig.align='center', echo=TRUE}
 p <- babynames %>% 
   filter(name %in% c("Sam", "Alex")) %>% 
-  plot_ly(x = ~ year, 
+  plot_ly(x = ~year, 
           y = ~prop, 
           color = ~sex, 
           linetype = ~name,
@@ -396,7 +378,9 @@ p <- babynames %>%
           )) %>% 
   add_lines() %>% 
   rangeslider() %>% 
-  layout(hovermode = "x",
+  layout(xaxis = list(title = "Year"),
+         yaxis = list(title = "Probability"),
+         hovermode = "x",
          paper_bgcolor = 'rgba(0,0,0,0)',
          plot_bgcolor = 'rgba(0,0,0,0)')
 ```
@@ -422,19 +406,10 @@ p
   + **Trace**: the data
   + **Trace Type**: ex. histogram, pie, scatter, etc.
   + **Attribute**: the style
-  ]
---
-
-.font170[- Call plotly with **plot_ly** and map variables]
---
-
-.font170[- Chain traces with pipes **%>%** ]
---
-
-.font170[- Always pass variables with a tilde **~** ]
---
-
-.font170[- You will oftentimes need to pass parameters in **lists**!]
+- Call plotly with **plot_ly** and map variables
+- Chain traces with pipes **%>%** 
+- Always pass variables with a tilde **~** 
+- You will oftentimes need to pass parameters in **lists**!]
 
 ---
 class: hide-logo, inverse, center, middle
