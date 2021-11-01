@@ -12,10 +12,10 @@ output:
     theme: lumen
     toc_depth: 3
     toc_float: true
-    css: custom.css 
+    css: magic/custom.css 
     self_contained: false
     includes:
-      after_body: footer.html
+      after_body: magic/footer.html
 ---
 
 ```{r setup, include=FALSE}
@@ -29,18 +29,16 @@ What we will cover:
 
 * installing plotly
 * ggplot vs. plotly syntax 
-* using ggplotly
-* plotly examples
+* fundamental plots
+* ggplotly
+* pro tips
 * Q&A
 
-# Install  `r emo::ji("man_technologist")`
+# Install  `r emo::ji("woman_technologist")``r emo::ji("man_technologist")`
 
 ```{r install, eval=TRUE, message=FALSE, warning=FALSE, results='hide'}
 # Download from CRAN
-install.packages('plotly', repos = 'http://cran.us.r-project.org')
-
-# Download from GitHub
-devtools::install_github("ropensci/plotly")
+if (!require("plotly")) install.packages("plotly")
 
 # load plotly
 library(plotly)
@@ -48,15 +46,14 @@ library(plotly)
 
 # ggplot2 vs. plotly
 
-Last week we learned about ggplot2's grammar of graphics. Here we'll examine how plotly's syntax differs from that of ggplot2. 
+Last week we learned about ggplot2's grammar of graphics. Today we'll examine how plotly's syntax differs from that of ggplot2. 
 
 ## ggplot2
 
-Let's quickly recap ggplot2's grammar of graphics. In most cases you start with ggplot( ), supply a data set and aesthetic mapping (with aes( )). You then add on layers (e.g., geom_point( ) or geom_histogram( )), scales (e.g., scale_colour_brewer( )), faceting specifications (e.g., facet_wrap( )) and coordinate systems (e.g., coord_flip( )).
-[(more info)](https://ggplot2.tidyverse.org/)
+Let's quickly recap ggplot2's grammar of graphics. In most cases you start with `ggplot()`, supply a data set and aesthetic mapping (with `aes()`). You then add on layers (e.g., `geom_point()` or `geom_histogram()`), scales (e.g., `scale_colour_brewer()`), faceting specifications (e.g., `facet_wrap()`) and coordinate systems (e.g., `coord_flip()`).
+[(more info >>>)](https://ggplot2.tidyverse.org/)
 
-
-Here's the template for building plots with ggplot2:
+Here's a template for building graphics with ggplot2:
 ```
 ggplot(data = <DATA>) + 
   <GEOM_FUNCTION>(
@@ -67,7 +64,6 @@ ggplot(data = <DATA>) +
   <COORDINATE_FUNCTION> +
   <FACET_FUNCTION>
 ```
-
 
 Here's an example of ggplot2 in action:
 ```{r ggplot2, fig.align='center'}
@@ -91,32 +87,31 @@ The grammar of plotly is similar to that of ggplot2. Like ggplot2, you start wit
 
 In plotly, the base is referred to as a "trace." A trace defines a mapping from data and visuals. Every trace has a type (e.g., histogram, pie, scatter, etc) and the trace type determines what other attributes (i.e., visual and/or interactive properties, like x, hoverinfo, name) are available to control the trace mapping.
 
-To add a layer in the graph, such as fitting a linear regression line, we use **add_trace()**. There is also a family of **add_*( )** functions (e.g., add_histogram( ), add_lines( ), etc) that define how to render data into geometric objects. [(more info)](https://jtr13.github.io/spring19/community_contribution_group17.html)
+To add a layer in the graph, such as fitting a linear regression line, we use `add_trace()`. There is also a family of `add_*()` functions (e.g., `add_histogram()`, `add_lines()`, etc) that define how to render data into geometric objects. [(more info >>>)](https://jtr13.github.io/spring19/community_contribution_group17.html)
 
-List of **add_*( )** functions:
+List of `add_*()` functions:
 
-* add_histograms( )
-* add_bars( )
-* add_boxplot( )
-* add_contour( )
-* add_lines( )
-* add_heatmap( )
-* add_scattergeo( )
-* add_pie( )
+* `add_histograms()`
+* `add_bars()`
+* `add_boxplot()`
+* `add_contour()`
+* `add_lines()`
+* `add_heatmap()`
+* `add_scattergeo()`
+* `add_pie()`
 * and many more...
 
 ### Layout
 
-The layout( ) function adds and modifies parts of the plotly graphic. This includes modifying the plot title, legend, margins, size, font, background color, colorscale, and hoverlabels among other features.  
+The `layout()` function adds and modifies parts of the plotly graphic. This includes modifying the plot title, legend, margins, size, font, background color, colorscale, and hoverlabels among other features.  
 
 Here's how you would create the plot from above using plotly:  
 ```{r plotly, fig.align='center'}
 library(plotly)
 
 iris %>% # Add data
-  # NOTE: plotly works with pipe operators (%>%)
+  # NOTE: You will need to use `~` to map a variable of the data set to an aesthetic parameter
   plot_ly(x = ~Petal.Length, y = ~Sepal.Length, split = ~Species, # Add mappings
-  # NOTE: You will need to use ~ to map a variable of the data set to an aesthetic parameter
         type = 'scatter') %>% # Specify trace type 
   layout(title = 'Petal vs. Sepal Length', # Add title & labels
          xaxis = list(title = 'Petal Length'),
@@ -139,19 +134,107 @@ To underscore this point, the table below shows the differences in ggplot2 and p
 
 ### schema( )
 
-It's not easy learning an entirely new grammar of graphics. Thankfully the schema( ) function is a helpful resource! The schema contains valid attributes names, their value type, default values (if any), and min/max values (if applicable). [(more info)](https://www.rdocumentation.org/packages/plotly/versions/4.10.0/topics/schema)
+The standard documentation retrieved via `?plot_ly()` and specific traces is oftentimes not particularly helpful. You can access a more elaborate documentation via the `schema()` command. Not only is there much more information, the hierarchical list structure also gives a better overview of the underlying logic and syntax of plotly.
 
 ```{r schema}
-# Try it! 
+# Check it out!
 schema()
+```
+
+# Fundamental Plots
+
+While the possibilities with plotly are almost endless, here are several fundamental plots that will likely be useful.  
+
+```{r fundamentals}
+# scatterplot 
+plot_ly(mpg, x = ~displ, y = ~hwy, color = ~class) %>% 
+  add_markers()
+
+# line plot
+plot_ly(economics, x = ~date, y = ~uempmed) %>% 
+  add_paths()
+
+# ribbons
+plot_ly(economics, x = ~date) %>%
+  add_ribbons(ymin = ~pce - 1e3, ymax = ~pce + 1e3)
+
+# use `add_sf()` or `add_polygons()` to create geo-spatial maps
+# http://blog.cpsievert.me/2018/03/30/visualizing-geo-spatial-data-with-sf-and-plotly/
+if (requireNamespace("sf", quietly = TRUE)) {
+  nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+  plot_ly() %>% add_sf(data = nc)
+  }
+
+# univariate summary statistics
+# boxplot
+plot_ly(mtcars, x = ~factor(vs), y = ~mpg) %>%
+  add_boxplot()
+
+# violin
+plot_ly(mtcars, x = ~factor(vs), y = ~mpg) %>%
+  add_trace(type = "violin")
+
+# histogram
+# `add_histogram()` does binning for you...
+diamonds %>%
+  plot_ly(x = ~cut) %>% 
+  add_histogram()
+
+# bar chart
+# ...you can also 'pre-compute' bar heights in R
+diamonds %>%
+  dplyr::count(cut) %>%
+  plot_ly(x = ~cut, y = ~n) %>%
+  add_bars()
+
+# 2D histogram
+library(MASS)
+plot_ly(geyser, x = ~waiting, y = ~duration) %>% 
+  add_histogram2d()
+
+# 2D histogram contour
+plot_ly(geyser, x = ~waiting, y = ~duration) %>% 
+  add_histogram2dcontour()
+
+# heatmap 
+# (i.e., bin counts must be pre-specified)
+den <- kde2d(geyser$waiting, geyser$duration)
+plot_ly(x = den$x, y = den$y, z = den$z) %>% 
+  add_heatmap()
+
+# heatmap contour
+den <- kde2d(geyser$waiting, geyser$duration)
+plot_ly(x = den$x, y = den$y, z = den$z) %>% 
+  add_contour()
+
+# `add_table()` makes it easy to map a data frame to the table trace type
+plot_ly(economics) %>%
+  add_table()
+
+# pie chart
+ds <- data.frame(labels = c("C", "B", "A"), values = c(10, 40, 60))
+plot_ly(ds, labels = ~labels, values = ~values) %>%
+  add_pie() %>%
+  layout(title = "Basic Pie Chart using Plotly")
+
+# radial pie chart
+data(wind)
+plot_ly(wind, r = ~r, t = ~t) %>%
+  add_area(color = ~nms) %>%
+  layout(radialaxis = list(ticksuffix = "%"), orientation = 270)
+
+# 3D surface plot
+# Not the most useful trace type but it's still very interesting! 
+plot_ly(z = ~volcano) %>%
+  add_surface()
 ```
 
 # ggplotly 
 
-The ggplotly( ) function has the ability to translate ggplot2 to plotly. This functionality can be really helpful for quickly adding interactivity to your existing ggplot2 workflow. Moreover, even if you know plotly well, you can still leverage ggplot2’s consistent and expressive interface for exploring statistical summaries across groups. [(more info)](https://plotly-r.com/overview.html#intro-ggplotly)
+The `ggplotly()` function has the ability to translate ggplot2 to plotly. This functionality can be really helpful for quickly adding interactivity to your existing ggplot2 workflow. Moreover, even if you know plotly well, you can still leverage ggplot2’s consistent and expressive interface for exploring statistical summaries across groups. [(more info >>>)](https://plotly-r.com/overview.html#intro-ggplotly)
 
-To use ggplotly function, plot a regular ggplot2 graphic and then apply the ggplotly( ) function. 
-```{r ggplotly, message=FALSE, warning=FALSE, fig.align='center'}}
+Take advantage of ggplotly by plotting a regular ggplot2 graphic and then applying the `ggplotly()` function. Here's an example using the `iris` data set from earlier. 
+```{r ggplotly, message=FALSE, warning=FALSE, fig.align='center'}
 library(ggplot2)
 library(plotly)
 
@@ -169,141 +252,149 @@ g <- ggplot(iris) + # Add data
 ggplotly(g)
 ```
 
-# Key Features
+# Pro Tips
 
-```{r}
-# the `plot_ly()` function initiates an object, and if no trace type
-# is specified, it sets a sensible default
-p <- plot_ly(economics, x = ~date, y = ~uempmed)
-p
-# some `add_*()` functions are a specific case of a trace type
-# for example, `add_markers()` is a scatter trace with mode of markers
-add_markers(p)
-# scatter trace with mode of text
-add_text(p, text = "%")
-# scatter trace with mode of lines
-add_paths(p)
-# like `add_paths()`, but ensures points are connected according to `x`
-add_lines(p)
-# if you prefer to work with plotly.js more directly, can always
-# use `add_trace()` and specify the type yourself
-add_trace(p, type = "scatter", mode = "markers+lines")
-# mappings provided to `plot_ly()` are "global", but can be overwritten
-plot_ly(economics, x = ~date, y = ~uempmed, color = I("red"), showlegend = FALSE) %>%
-add_lines() %>%
-add_markers(color = ~pop)
+## Hover Info
 
-# a number of `add_*()` functions are special cases of the scatter trace
-plot_ly(economics, x = ~date) %>%
-add_ribbons(ymin = ~pce - 1e3, ymax = ~pce + 1e3)
-# use `group_by()` (or `group2NA()`) to apply visual mapping
-# once per group (e.g. one line per group)
-txhousing %>%
-group_by(city) %>%
-plot_ly(x = ~date, y = ~median) %>%
-add_lines(color = I("black"))
-## Not run:
-# use `add_sf()` or `add_polygons()` to create geo-spatial maps
-# http://blog.cpsievert.me/2018/03/30/visualizing-geo-spatial-data-with-sf-and-plotly/
-if (requireNamespace("sf", quietly = TRUE)) {
-nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
-plot_ly() %>% add_sf(data = nc)
+Editing the tooltip that shows up when hovering over plotly graphics can be a pain. At the same time, this is typically the first thing you would want to do when creating a plot since the hoverinfo is the most basic interactive feature. 
+
+The key parameters for customizing the tooltip are:
+
+• `hoverinfo`: Using this in combination with the `text`-argument the most straight-forward way to do this.
+
+• `hovertemplate`: takes a particular formula and overwrites whatever is in the hoverinfo. This might be what you are looking for when you also want your formats to correspond with the x-axis format.
+
+• `text`: will add text to the tooltip box. If you wish to delete the displayed hoverinfo, specify `hoverinfo = "text"`. You can add basically everything here, just pay attention to where to put the `~` operator!
+
+There are a number of ways to go about this:
+```{r hoverinfo code, message=FALSE}
+hover_map <- function(text, 
+                      hoverinfo, 
+                      hovertemplate, 
+                      title) { # Defining function for subsequent mapping
+    plot_ly(mtcars,
+      x = ~mpg,
+      y = ~hp,
+      color = ~as.factor(gear),
+      text = text,
+      hoverinfo = hoverinfo, # Passing hoverinfo here!
+      hovertemplate = hovertemplate, # Passing hovertemplate!
+      hoverlabel = list( # This is simply to demonstrate how to change the layout of the tooltip. 
+        bgcolor = "#348597", # Background colour of the tooltip.
+        bordercolor = "transparent", # Contour of the tooltip box
+        font = list( # Specifying the font type, size and color
+          family = "Times New Roman",
+          size = 15,
+          color = "white"
+        )
+      ) # Notice how neither type nor trace are defined. Plotly interprets the passed data as a scatter
+    ) %>% 
+    layout(
+      annotations = # Setting the subplot labels, a workaround as individual subplot titles are not supported :(
+        list(
+          x = 0.3, 
+          y = 1.075, 
+          text = title, 
+          showarrow = F, 
+          xref = 'paper', 
+          yref = 'paper')
+    ) %>% 
+    hide_legend() 
 }
-# univariate summary statistics
-plot_ly(mtcars, x = ~factor(vs), y = ~mpg) %>%
-add_boxplot()
-plot_ly(mtcars, x = ~factor(vs), y = ~mpg) %>%
-add_trace(type = "violin")
-# `add_histogram()` does binning for you...
-mtcars %>%
-plot_ly(x = ~factor(vs)) %>%
-add_histogram()
-# ...but you can 'pre-compute' bar heights in R
-mtcars %>%
-dplyr::count(vs) %>%
-plot_ly(x = ~vs, y = ~n) %>%
-add_bars()
-# the 2d analogy of add_histogram() is add_histogram2d()/add_histogram2dcontour()
-library(MASS)
-(p <- plot_ly(geyser, x = ~waiting, y = ~duration))
-add_histogram2d(p)
-add_histogram2dcontour(p)
-# the 2d analogy of add_bars() is add_heatmap()/add_contour()
-# (i.e., bin counts must be pre-specified)
-den <- kde2d(geyser$waiting, geyser$duration)
-p <- plot_ly(x = den$x, y = den$y, z = den$z)
-add_heatmap(p)
-add_contour(p)
-# `add_table()` makes it easy to map a data frame to the table trace type
-plot_ly(economics) %>%
-add_table()
 
-# pie charts!
-ds <- data.frame(labels = c("A", "B", "C"), values = c(10, 40, 60))
-plot_ly(ds, labels = ~labels, values = ~values) %>%
-add_pie() %>%
-layout(title = "Basic Pie Chart using Plotly")
-data(wind)
-plot_ly(wind, r = ~r, t = ~t) %>%
-add_area(color = ~nms) %>%
-layout(radialaxis = list(ticksuffix = "%"), orientation = 270)
-# ------------------------------------------------------------
-# 3D chart types
-# ------------------------------------------------------------
-plot_ly(z = ~volcano) %>%
-add_surface()
-plot_ly(x = c(0, 0, 1), y = c(0, 1, 0), z = c(0, 0, 0)) %>%
-add_mesh()
+hover_list <- list( # Creating a list to pass to pmap(). We will show 4 options
+  
+  text = list( # Parameters passed to text in the plot_ly call above
+    paste0("Just a normal vector </br>", row.names(mtcars)),
+    ~paste0(
+      "</br> MPG: ", mpg,
+      "</br> HP: ", hp,
+      "</br> Cyl: ", cyl, 
+      "</br>", emo::ji("car")
+      ),
+    NULL,
+    ~qsec
+  ),
+  
+  hoverinfo = list( # Parameters passed to hoverinfo
+    NULL,
+    "text",
+    NULL,
+    "text"
+  ),
+  
+  hovertemplate = list( # Parameters passed to hovertemplate
+    NULL,
+    NULL,
+    "The car has %{y:$} HP </br>
+    and it has %{x:.1e} MPG.<extra> This is outside the box!</extra>",
+    NULL
+  ),
+  
+  title = list( # Subplot titles
+    "Passing a vector to hovertext",
+    "Custom paste0 formula tooltip",
+    "Using hovertemplate",
+    "Passing a single variable to hovertext"
+  )
+  
+)
+
+plots <- purrr::pmap(hover_list, hover_map)
+
+hover_plot <- subplot(plots, nrows = 2, shareX = T, shareY = T)
 ```
 
-
-```{r}
-diamonds %>%
-  plot_ly() %>% 
-  add_histogram(x = ~cut)
+```{r hoverinfo plot, echo=FALSE}
+hover_plot
 ```
 
-The type of plot is specified by setting the trace type. The scatter trace type is the foundation for many low-level geometries (e.g., points, lines, and text), thus we must also specify a mode. To create a scatter plot with points the mode is set to markers, but additional scatter modes include lines, paths, segments, ribbons, polygons, and text.
-(https://blog.methodsconsultants.com/posts/introduction-to-interactive-graphics-in-r-with-plotly/)
+If you want to simply include variables that are already in the plot (e.g. mapped x, y variables) to the hover text, we would recommend using the `hovertemplate` as it brings you more flexibility and is way easier for customizing the format of the hover text. If there are more variables involved, set `hoverinfo = "text"` and `text = ~paste("whatever", variable, "you wish, using </br> for line breaks!")`. 
 
-```{r}
-mpg %>%
-  plot_ly(x = ~displ, y = ~hwy, color = ~class)
+**Pay attention:** The tooltip is adjusted differently when using `ggplotly()`. By default all values mapped to `aes()` will be included. to restrict this include `tooltip = "text"` in the ggplotly call. You can also pass a vector to `tooltip`. 
+
+## Linked Plots
+
+As briefly touched upon in the video, the `crosstalk` library is essential for creating linked plots. 
+
+To do so, initiate a `SharedData` object, build the two plots you would like to link and use the `subplot()` command to connect them. You can specify the highlighting type in the `highlight()` command's on-parameter.
+
+```{r linked plots, message=FALSE}
+library(crosstalk)
+
+shared_data <- SharedData$new(mtcars) # Creating the shared data object
+
+p1 <- shared_data %>% # Building the first plot
+  plot_ly(
+    x = ~mpg,
+    y = ~hp
+  )
+
+p2 <- shared_data %>% # Building the second plot
+  plot_ly(
+    x = ~qsec,
+    y = ~wt
+  )
+
+subplot(p1, p2) %>%  # Connecting them with subplot
+  highlight(on = "plotly_selected") %>% # Highlighting with box selection
+  hide_legend()
 ```
-
-```{r}
-mpg %>%
-  plot_ly(x = ~displ, y = ~hwy, color = ~class) %>%
-  add_trace(type = "scatter", mode = "markers")
-```
-
-Rather than using add_trace() and specifying the type and mode, we can use the convenience function add_markers(). (https://blog.methodsconsultants.com/posts/introduction-to-interactive-graphics-in-r-with-plotly/)
-
-```{r}
-mpg %>%
-  plot_ly(x = ~displ, y = ~hwy, color = ~class) %>%
-  add_markers()
-```
-
-
-
-
 
 # Q&A 
 
-```{r, fig.align='center', echo=FALSE, out.width = "90%"}
+```{r Q&A, fig.align='center', echo=FALSE, out.width = "90%"}
 knitr::include_graphics("pics/questions.png")
 ```
 
 # Sources
 
 This tutorial drew from the following sources:
+
+* [Interactive web-based data visualization with R, plotly, and shiny](https://plotly-r.com)
+* [R for Data Science, Ch.3 Data Visualisation](https://r4ds.had.co.nz/data-visualisation.html)
 * [A Comparison of plot_ly and ggplotly for Interactive Graphs in R](https://jtr13.github.io/spring19/community_contribution_group17.html)
-* (https://ggplot2.tidyverse.org/)
-* (https://r4ds.had.co.nz/data-visualisation.html)
-* (https://plotly-r.com/overview.html)
-* (https://cran.r-project.org/web/packages/plotly/plotly.pdf)
+* [Package 'plotly'](https://cran.r-project.org/web/packages/plotly/plotly.pdf)
+* [Introduction to ggplot2](https://ggplot2.tidyverse.org/)
 
-We also used an [example](https://towardsdatascience.com/tidy-web-scraping-in-r-tutorial-and-resources-ac9f72b4fe47) from Keith McNulty's blog post on tidy web scraping in R.
-
-[example](https://jtr13.github.io/spring19/community_contribution_group17.html)
+We also used [examples](https://blog.methodsconsultants.com/posts/introduction-to-interactive-graphics-in-r-with-plotly/) from Michael Battaglia's blog post entitled, "Introduction to Interactive Graphics in R with plotly."
