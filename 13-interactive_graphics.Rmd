@@ -64,44 +64,20 @@ class: hide-logo, inverse, center, middle
 # **What is plotly?**
 
 ---
-background-image: url("https://d33wubrfki0l68.cloudfront.net/3e0445f7fc16698cc4402445259d84aa411dddc3/9abcb/diagrams/data-science-communicate.png")
-background-position: center
-background-size: contain
 
-# Data Visualization
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Plotly_logo_for_digital_final_%286%29.png/1600px-Plotly_logo_for_digital_final_%286%29.png)
+background-position: bottom
+background-size: 75% 75% 
 
-???
-primary: Explanatory Data that allows audience to explore for themselves
+# What is plotly?
 
-Image credit: [R for Data Science, Ch. 26](https://r4ds.had.co.nz/explore-intro.html)
+.font150[
+plotly is an R package for creating **interactive** and **dynamic** **web-based** graphics  
 
----
-
-# Data Visualization
-
-</br>
-</br>
-</br>
-</br>
-</br>
-.font180[.center[“The simple graph has brought more information to the data analyst’s mind than any other device.” 
-</br>
-</br>
-John Tukey]]
-
----
-
-# Data Visualization
-
-</br>
-</br>
-</br>
-</br>
-</br>
-.font200[.center[“The ~~simple~~ dynamic graph has brought more information to the data analyst’s mind than any other device.”
-</br>
-</br>
-Julian Kath & Steve Kerr]]
+1. Audiences can directly **interact** with your data
+1. **Dynamic** graphics change automatically
+1. **Web-based** graphics can be easily shared 
+]
 
 ---
 
@@ -207,21 +183,6 @@ gapminder  %>%
 ![Imgflip](https://i.imgflip.com/5rmjit.jpg)
 ]
 
----
-
-background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Plotly_logo_for_digital_final_%286%29.png/1600px-Plotly_logo_for_digital_final_%286%29.png)
-background-position: bottom
-background-size: 75% 75% 
-
-# What is plotly?
-
-.font150[
-plotly is an R package for creating **interactive** and **dynamic** **web-based** graphics  
-
-1. Audiences can directly **interact** with your data
-1. **Dynamic** graphics change automatically
-1. **Web-based** graphics can be easily shared 
-]
 ---
 class: hide-logo, inverse, center, middle
 
@@ -520,11 +481,11 @@ gapminder %>%
                         "</br> Life Expectancy: ", lifeExp,
                         "</br> Population: ", round(pop/1000000, 0), " Mio")) %>% 
   add_text(x = 6500, y = 40, # Background text
-           text = ~year, frame = ~year, #<<
+           text = ~year, frame = ~year, 
            textfont = list(size = 150, 
                            color = toRGB("gray80"))) %>% 
   add_markers(size = ~pop, color = ~continent, # Customizing Markers, Mapping continent onto color
-              frame = ~year, ids = ~country, #<<
+              frame = ~year, ids = ~country, 
               marker = list(sizemode = "diameter")) %>% 
   layout(title = "GDP per capita vs. Life Expectancy from 1952 to 2007",
          xaxis = list(type = "log",
@@ -694,7 +655,7 @@ class: hide-logo, inverse, center, middle
 <br></br>
 - plotly graphics can be created by (1) **converting ggplot()** graphics and (2) initializing **directly with plot_ly()**
 <br></br>
-- Key features include the ability to **animate** graphs, **link** plots, and **filter** observations to enable the audience to interact with your data
+- Key features include the ability to create **subplots**, **animate** graphs, **link** plots, and **filter** observations to enable the audience to interact with your data
 <br></br>
 - plotly might **not always** be the right tool!
 ]
@@ -724,6 +685,7 @@ class: hide-logo, inverse, center, middle
 <br></br>
 - [Mixed Subplots](https://plotly.com/r/mixed-subplots/)
 <br></br>
+- [Interactive Charts](https://www.r-graph-gallery.com/interactive-charts.html)
 ]
 
 ---

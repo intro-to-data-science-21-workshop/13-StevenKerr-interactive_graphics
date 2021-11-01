@@ -23,22 +23,75 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 ***
 
-After talking quite a bit about data formats and data processing in the past weeks, today's session is dedicated to data collection - from the web!
+Welcome to *plotly*! *plotly* is an R package for creating **interactive** and **dynamic** **web-based** graphics.  
 
 What we will cover:
 
-* basic web technologies (html, xpath)
-* scraping static webpages
-* scraping multiple static webpages 
-* building up and maintaining you own original sets of web-based data
+* installing plotly
+* ggplot vs. plotly syntax 
+* creating basic graphics
+* advanced features
+* Q&A
 
-What we will not cover (today): 
+# Install plotly `r emo::ji("woman_technologist")`
 
-* scraping dynamic webpages
-* APIs 
-* extensive data cleaning using regular expressions
+```{r install, message=FALSE, warning=FALSE, eval=FALSE, echo=FALSE}
+# Download from CRAN
+install.packages('plotly')
 
-# Why webscrape with R? `r emo::ji("globe")`
+# Download from GitHub
+devtools::install_github("ropensci/plotly")
+
+# load plotly
+library(plotly)
+```
+
+# ggplot vs. plotly 
+
+```{r ggplot vs. plotly table, echo=FALSE, message=FALSE, warning=FALSE}
+library(plotly)
+
+fig <- plot_ly(
+  type = 'table',
+  columnwidth = c(100, 100),
+  columnorder = c(0, 1),
+  header = list(
+    values = c("ggplot","plotly"),
+    align = c("center", "center"),
+    line = list(width = 1, color = '#434b73
+'),
+    fill = list(color = c("grey", "grey")),
+    font = list(family = "Arial", size = 14, color = "white")
+  ),
+  cells = list(
+    values = rbind(c("info on ggplot"), c("info on plotly")),
+    align = c("center", "center"),
+    line = list(color = "black", width = 1),
+    font = list(family = "Arial", size = 12, color = c("black"))
+  ))
+
+fig
+```
+
+Key Terms
+Traces
+Attributes
+In plotly.js terminology, a figure has two key components: data (aka, traces) and a layout. A trace defines a mapping from data and visuals.4 Every trace has a type (e.g., histogram, pie, scatter, etc) and the trace type determines what other attributes (i.e., visual and/or interactive properties, like x, hoverinfo, name) are available to control the trace mapping.
+
+Like ggplot2, you start with a base and add layers
+a figure has two key components: data (aka, traces) and a layout. A trace defines a mapping from data and visuals.4 Every trace has a type (e.g., histogram, pie, scatter, etc) and the trace type determines what other attributes (i.e., visual and/or interactive properties, like x, hoverinfo, name) are available to control the trace mapping.
+A layer can be thought of as a group of graphical elements that can be sufficiently described using only 5 components: data, aesthetic mappings (e.g., assigning clarity to color), a geometric representation (e.g. rectangles, circles, etc), statistical transformations (e.g., sum, mean, etc), and positional adjustments (e.g., dodge, stack, etc).
+There are also a family of add_*() functions (e.g., add_histogram(), add_lines(), etc) that define how to render data into geometric objects.
+There are numerous other add_*() functions that calculate statistics in the browser (e.g., add_histogram2d(), add_contour(), add_boxplot(), etc)
+use ~ to map a variable (i.e. column) of the dataset to an aesthetic parameter.
+In addition to layout() for adding/modifying part(s) of the graph’s layout
+The style() function provides a way to modify trace attribute values in a plotly object. Furthermore, you can use the plotly_build() function.
+Works well with the dplyr package!
+
+
+There is no right or wrong answer to exactly when you should use each type of graphic, however, there are a few rules of thumb: 
+
+* static grapchis are quick and easy to produce. 
 
 Webscraping broadly includes a) getting (unstructured) data from the web and b) 
 bringing it into shape (e.g. cleaning it, getting it into tabular format).
